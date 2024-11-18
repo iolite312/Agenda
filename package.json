@@ -1,0 +1,8 @@
+{
+	"dependencies": {
+		"tailwindcss": "^3.4.15"
+	},
+	"scripts": {
+		"watch": "pnpm dlx tailwindcss -i ./resources/assets/main.css -o ./public/css/style.css --watch"
+	}
+}
