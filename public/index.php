@@ -11,3 +11,5 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $response = $router->resolve($method, $_SERVER['REQUEST_URI']);
 
 echo $response;
+
+// test for signing commits
