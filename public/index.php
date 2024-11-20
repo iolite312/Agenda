@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda</title>
-</head>
-<body>
-    <h1 class="text-3xl">test</h1>
-</body>
-</html>
+<?php 
+require "../vendor/autoload.php";
+
+use app\Application\Router;
+$router = new Router();
+// Get the request method and URI
+$method = $_SERVER['REQUEST_METHOD'];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+// Resolve the route and send the response
+$response = $router->resolve($method, $_SERVER['REQUEST_URI']);
+
+echo $response;
