@@ -2,7 +2,7 @@
     "name": "dev/agenda",
     "autoload": {
         "psr-4": {
-            "app\\": "app/"
+            "App\\": "app/"
         }
     },
     "authors": [
