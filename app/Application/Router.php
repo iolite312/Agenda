@@ -4,36 +4,50 @@ namespace App\Application;
 
 class Router
 {
-    protected $routes = [];
+    private array $routes = [];
+    public Request $request;
+    public Response $response;
+    private static Router $instance;
+
+    public function __construct()
+    {
+        $this->request = new Request();
+        $this->response = new Response();
+    }
+
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new Router();
+        }
+        return self::$instance;
+    }
 
     public function get($uri, $callback)
     {
-        self::$routes['GET'][$uri] = $callback;
+        $this->routes['GET'][$uri] = $callback;
     }
 
     public function post($uri, $callback)
     {
-        self::$routes['POST'][$uri] = $callback;
+        $this->routes['POST'][$uri] = $callback;
     }
 
-    public function resolve($method, $uri)
+    public function resolve(): void
     {
-        $uri = rtrim($uri, '/'); // Normalize URI (remove trailing slashes)
-        $callback = self::$routes[$method][$uri] ?? null;
+        $uri = $this->request->getPath();
+        $method = $this->request->getMethod();
+        $callback = $this->routes[$method][$uri] ?? null;
 
-        if (!$callback) {
-            // http_response_code(404);
-            return "404 Not Found";
+        if ($callback === null) {
+            $this->response->setStatusCode(404);
+            $this->response->setContent('404 Not Found');
+        } else {
+            $callback[0] = new $callback[0];
+            $content = call_user_func($callback, $this->request, $this->response);
+            $this->response->setContent($content);
         }
 
-        if (is_callable($callback)) {
-            return call_user_func($callback);
-        }
-
-        if (is_string($callback)) {
-            return $callback;
-        }
-
-        throw new \Exception('Invalid route callback.');
+        $this->response->send();
     }
 }
