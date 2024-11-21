@@ -2,8 +2,10 @@
 
 namespace App\Controllers;
 
-class HomeController extends Controller {
-    public function index() {
-        echo "Hi";
+class HomeController extends Controller
+{
+    public function index()
+    {
+        return $this->pageLoader->setPage('home')->render();
     }
 }
