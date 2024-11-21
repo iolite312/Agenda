@@ -1,15 +1,17 @@
-<?php 
+<?php
 require "../vendor/autoload.php";
 
-use app\Application\Router;
-$router = new Router();
-// Get the request method and URI
-$method = $_SERVER['REQUEST_METHOD'];
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$app = App\Application\Application::getInstance();
+$router = App\Application\Router::getInstance();
 
-// Resolve the route and send the response
-$response = $router->resolve($method, $_SERVER['REQUEST_URI']);
+// Load all routes
+$handle = opendir(__DIR__ . '/../routes');
+while (false !== ($file = readdir($handle))) {
+    if ($file == '.' || $file == '..') {
+        continue;
+    }
+    require_once __DIR__ . '/../routes/' . $file;
+}
+closedir($handle);
 
-echo $response;
-
-// test for signing commits
+$app->run();
