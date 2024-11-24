@@ -11,5 +11,7 @@
             "email": "68647023+iolite312@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {
+        "cboden/ratchet": "^0.4.4"
+    }
 }
