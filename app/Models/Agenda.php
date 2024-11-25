@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Repositories\SessionHandlerRepository;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
 class Agenda implements MessageComponentInterface
 {
-    protected $clients;
+    private $clients;
+
+    // private SessionHandlerRepository $sessionsHandler;
 
     public function __construct()
     {
+        // $this->sessionsHandler = new SessionHandlerRepository();
         $this->clients = new \SplObjectStorage;
     }
 
@@ -19,6 +23,27 @@ class Agenda implements MessageComponentInterface
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
 
+        // Get the PHPSESSID from the handshake headers
+        $headers = $conn->httpRequest->getHeaders();
+        $cookies = $headers['Cookie'][0] ?? '';
+        preg_match('/PHPSESSID=([^;]+)/', $cookies, $matches);
+        $sessionId = $matches[1] ?? null;
+
+        if ($sessionId) {
+            // session_destroy();
+            session_id($sessionId);
+            session_start();
+
+            // var_dump(json_encode($sessionId));
+            var_dump(json_encode($_SESSION['test']));
+            // if ($sessionData) {
+            //     $sessionData = unserialize($sessionData);
+            //     var_dump($sessionData);
+            // }
+            $_SESSION['test'] = 'redis';
+            sleep(10);
+            session_write_close();
+        }
         echo "New connection! ({$conn->resourceId})\n";
     }
 

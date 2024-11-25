@@ -1,9 +1,5 @@
 <?php
-
-use App\Models\Agenda;
-use Ratchet\Http\HttpServer;
-use Ratchet\Server\IoServer;
-use Ratchet\WebSocket\WsServer;
+error_reporting(E_ALL & ~E_DEPRECATED);
 require "../vendor/autoload.php";
 
 $app = App\Application\Application::getInstance();
@@ -18,13 +14,5 @@ while (false !== ($file = readdir($handle))) {
     require_once __DIR__ . '/../routes/' . $file;
 }
 closedir($handle);
-$server = IoServer::factory(
-    new HttpServer(
-        new WsServer(
-            new Agenda()
-        )
-    ),
-    8082
-);
-$server->run();
+
 $app->run();

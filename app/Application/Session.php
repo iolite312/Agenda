@@ -2,10 +2,14 @@
 
 namespace App\Application;
 
+use App\Repositories\SessionHandlerRepository;
+
 class Session
 {
     public static function start(): void
     {
+        $handler = new SessionHandlerRepository();
+        session_set_save_handler($handler, true);
         session_start();
     }
 

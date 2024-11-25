@@ -4,6 +4,6 @@
     foreach ($databases as $database) {
         echo "<p>{$database->Database}</p>";
     }
-    echo $_SESSION['test']
-        ?>
+    var_dump($_SESSION);
+    ?>
 </div>

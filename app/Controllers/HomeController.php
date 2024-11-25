@@ -16,7 +16,8 @@ class HomeController extends Controller
     }
     public function index()
     {
-        Session::set("test", "test");
+        Session::set("test", ["test" => "test"]);
+        Session::set("test2", "test");
         $databases = $this->getDatabasesRepository->getAllDatabases();
         return $this->pageLoader->setPage('home')->render([
             'databases' => $databases
