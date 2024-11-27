@@ -17,7 +17,6 @@ class Application
 
     public static function run()
     {
-        Session::start();
         $router = Router::getInstance();
         $router->resolve();
     }

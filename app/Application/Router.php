@@ -35,6 +35,8 @@ class Router
 
     public function resolve(): void
     {
+        // Initialize the session
+        \App\Application\Session::start();
         $uri = $this->request->getPath();
         $method = $this->request->getMethod();
         $callback = $this->routes[$method][$uri] ?? null;

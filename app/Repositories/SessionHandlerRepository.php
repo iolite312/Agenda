@@ -2,9 +2,7 @@
 
 namespace App\Repositories;
 
-use SessionHandlerInterface;
-
-class SessionHandlerRepository extends DatabaseRepository implements SessionHandlerInterface
+class SessionHandlerRepository extends DatabaseRepository
 {
     private \PDO $pdo;
     private $table;
@@ -16,35 +14,28 @@ class SessionHandlerRepository extends DatabaseRepository implements SessionHand
         $this->table = $table;
     }
 
-    public function open($savePath, $sessionName)
-    {
-        // Open the connection (if needed)
-        return true;
-    }
-
-    public function close()
-    {
-        // Close the connection (if needed)
-        return true;
-    }
-
     public function read($sessionId)
     {
         $stmt = $this->pdo->prepare("SELECT data FROM sessions WHERE id = :id");
         $stmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $result ? $result['data'] : '';
+        return $result ? unserialize($result['data']) : '';
     }
 
     public function write($sessionId, $data)
     {
-        // echo $data;
-        // $data = preg_split('/\|/', $data);
-        // echo json_encode(unserialize($data[1]));
+        $data = serialize($data);
         $stmt = $this->pdo->prepare("REPLACE INTO sessions (id, data, last_access) VALUES (:id, :data, NOW())");
         $stmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
         $stmt->bindParam(':data', $data, \PDO::PARAM_STR);
+        return $stmt->execute();
+    }
+
+    public function writeNewSession($sessionId)
+    {
+        $stmt = $this->pdo->prepare('INSERT INTO sessions (id, last_access) VALUES (:id, NOW())');
+        $stmt->bindParam(':id', $sessionId, \PDO::PARAM_STR);
         return $stmt->execute();
     }
 
