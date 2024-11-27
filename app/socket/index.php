@@ -1,6 +1,5 @@
 <?php
 use App\Models\Agenda;
-use App\Repositories\SessionHandlerRepository;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
@@ -17,6 +16,5 @@ $server = IoServer::factory(
     ),
     8082
 );
-// sleep(5);
-session_set_save_handler(new SessionHandlerRepository(), true);
+
 $server->run();

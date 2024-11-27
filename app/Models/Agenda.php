@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Repositories\SessionHandlerRepository;
+use App\Application\Session;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
@@ -26,23 +27,13 @@ class Agenda implements MessageComponentInterface
         // Get the PHPSESSID from the handshake headers
         $headers = $conn->httpRequest->getHeaders();
         $cookies = $headers['Cookie'][0] ?? '';
-        preg_match('/PHPSESSID=([^;]+)/', $cookies, $matches);
+        preg_match('/PHPSESSIDC=([^;]+)/', $cookies, $matches);
         $sessionId = $matches[1] ?? null;
-
         if ($sessionId) {
-            // session_destroy();
-            session_id($sessionId);
-            session_start();
-
-            // var_dump(json_encode($sessionId));
-            var_dump(json_encode($_SESSION['test']));
-            // if ($sessionData) {
-            //     $sessionData = unserialize($sessionData);
-            //     var_dump($sessionData);
-            // }
-            $_SESSION['test'] = 'redis';
-            sleep(10);
-            session_write_close();
+            Session::start($sessionId);
+            echo json_encode(Session::getAll())."\n";
+            Session::set("test2", "redis");
+            echo json_encode(Session::getAll())."\n";
         }
         echo "New connection! ({$conn->resourceId})\n";
     }
