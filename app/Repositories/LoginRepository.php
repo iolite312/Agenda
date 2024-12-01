@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Application\Session;
 use App\Enums\ResponseEnum;
+use App\Models\User;
 
 class LoginRepository extends DatabaseRepository
 {
@@ -23,7 +24,7 @@ class LoginRepository extends DatabaseRepository
             return ResponseEnum::NOT_FOUND;
         }
         if (password_verify($password . $result["salt"], $result['password'])) {
-            Session::set('user', ['id' => $result['id'], 'name' => $result['name']]);
+            Session::set('user', User::fromDatabase($result));
             return ResponseEnum::SUCCESS;
         } else {
             return ResponseEnum::ERROR;
