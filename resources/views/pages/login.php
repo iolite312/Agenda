@@ -1,23 +1,31 @@
-<div>
-    <h1 class="text-2xl font-medium">Login</h1>
-    <?
-    if (isset($error)) {
-        echo "<p>$error</p>";
-    }
-    ?>
-    <form action="/login" method="post" class="">
-        <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control" id="inputEmail3">
-            </div>
+<main class="form-signin w-100 m-auto">
+    <form action="/login" method="post">
+        <img class="mb-4" src="/assets/images/calendar_31_2x.png" alt="">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+        <?
+        if (isset($error)) {
+            echo "<div class=\"alert alert-danger\" role=\"alert\">$error</div>";
+        }
+        ?>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email"
+                value="<?php echo isset($fields['email']) ? $fields['email'] : ''; ?>">
+            <label for="floatingInput">Email address</label>
         </div>
-        <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword3">
-            </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password"
+                value="<?php echo isset($fields['password']) ? $fields['password'] : ''; ?>">
+            <label for="floatingPassword">Password</label>
         </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
+
+        <!-- <div class="form-check text-start my-3">
+            <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+                Remember me
+            </label>
+        </div> -->
+        <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+        <p class="mt-5 mb-3 text-body-secondary">© 2024–2024</p>
     </form>
-</div>
+</main>

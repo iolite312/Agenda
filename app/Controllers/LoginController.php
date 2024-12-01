@@ -18,7 +18,7 @@ class LoginController extends Controller
     }
     public function index()
     {
-        return $this->pageLoader->setPage('login')->render();
+        return $this->pageLoader->setLayout("login")->setPage('login')->render(['page' => 'login']);
     }
     public function login()
     {
@@ -28,16 +28,16 @@ class LoginController extends Controller
         if ($result === ResponseEnum::SUCCESS) {
             Response::redirect('/');
         } else {
-            return $this->rerender(['error' => 'Login failed']);
+            return $this->rerender(['error' => 'Incorrect email or password', 'page' => 'login', 'fields' => $_POST]);
         }
     }
     public function logout()
     {
         Session::destroy();
-        Response::redirect('/');
+        Response::redirect('/login');
     }
     private function rerender(array $paramaters = [])
     {
-        $this->pageLoader->setPage('login')->render($paramaters);
+        return $this->pageLoader->setLayout("login")->setPage('login')->render($paramaters);
     }
 }

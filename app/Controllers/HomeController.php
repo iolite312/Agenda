@@ -11,6 +11,6 @@ class HomeController extends Controller
     }
     public function index()
     {
-        return $this->pageLoader->setPage('home')->render();
+        return $this->pageLoader->setPage('home')->render(['page' => 'home']);
     }
 }
