@@ -20,7 +20,7 @@ class Session
             if (isset($_COOKIE['PHPSESSIDC'])) {
                 self::$sessionId = $_COOKIE['PHPSESSIDC'];
             }
-            self::$data = self::$handler->read(self::$sessionId) ?? [];
+            self::$data = self::$handler->read(self::$sessionId) ?: [];
         } else {
             // Generate a new session ID if no cookie is set
             self::$sessionId = Uuid::uuid4()->toString();
