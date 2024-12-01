@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Repositories\SessionHandlerRepository;
 use App\Application\Session;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -15,7 +14,6 @@ class Agenda implements MessageComponentInterface
 
     public function __construct()
     {
-        // $this->sessionsHandler = new SessionHandlerRepository();
         $this->clients = new \SplObjectStorage;
     }
 
@@ -31,9 +29,9 @@ class Agenda implements MessageComponentInterface
         $sessionId = $matches[1] ?? null;
         if ($sessionId) {
             Session::start($sessionId);
-            echo json_encode(Session::getAll())."\n";
+            echo json_encode(Session::getAll()) . "\n";
             Session::set("test2", "redis");
-            echo json_encode(Session::getAll())."\n";
+            echo json_encode(Session::getAll()) . "\n";
         }
         echo "New connection! ({$conn->resourceId})\n";
     }
@@ -49,6 +47,7 @@ class Agenda implements MessageComponentInterface
             $numRecv,
             $numRecv == 1 ? '' : 's'
         );
+        echo Session::get("test2") . "\n";
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {
