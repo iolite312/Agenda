@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Repositories\GetDatabasesRepository;
+use App\Application\Session;
 
 class HomeController extends Controller
 {
@@ -15,6 +16,8 @@ class HomeController extends Controller
     }
     public function index()
     {
+        Session::set("test", ["test" => "test"]);
+        Session::set("test2", "test");
         $databases = $this->getDatabasesRepository->getAllDatabases();
         return $this->pageLoader->setPage('home')->render([
             'databases' => $databases

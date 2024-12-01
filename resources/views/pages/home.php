@@ -4,5 +4,7 @@
     foreach ($databases as $database) {
         echo "<p>{$database->Database}</p>";
     }
+    use App\Application\Session;
+    var_dump(Session::getAll());
     ?>
 </div>
