@@ -16,7 +16,7 @@ class Session
         self::$handler = new SessionHandlerRepository();
         self::$sessionId = $sessionId;
         // Check if the session cookie exists
-        if (isset($_COOKIE['PHPSESSIDC'])|| !is_null(self::$sessionId)) {
+        if (isset($_COOKIE['PHPSESSIDC']) || !is_null(self::$sessionId)) {
             if (isset($_COOKIE['PHPSESSIDC'])) {
                 self::$sessionId = $_COOKIE['PHPSESSIDC'];
             }
