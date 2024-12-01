@@ -1,5 +1,6 @@
 <?php
-use App\Models\Agenda;
+
+use App\Models\AgendaSocket;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
@@ -11,7 +12,7 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 $server = IoServer::factory(
     new HttpServer(
         new WsServer(
-            new Agenda()
+            new AgendaSocket()
         )
     ),
     8082

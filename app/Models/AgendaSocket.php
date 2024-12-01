@@ -6,7 +6,7 @@ use App\Application\Session;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 
-class Agenda implements MessageComponentInterface
+class AgendaSocket implements MessageComponentInterface
 {
     private $clients;
 
