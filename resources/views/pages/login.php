@@ -1,16 +1,23 @@
 <div>
     <h1 class="text-2xl font-medium">Login</h1>
-    <form action="/login" method="post" class="flex flex-col gap-2">
-        <div>
-            <label for="email">Email: </label>
-            <input type="text" name="email" id="email" required class="border-slate-700 border-2 rounded">
+    <?
+    if (isset($error)) {
+        echo "<p>$error</p>";
+    }
+    ?>
+    <form action="/login" method="post" class="">
+        <div class="row mb-3">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3">
+            </div>
         </div>
-        <div>
-            <label for="password">Password: </label>
-            <input type="password" name="password" id="password" required class="border-slate-700 border-2 rounded">
+        <div class="row mb-3">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword3">
+            </div>
         </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
     </form>
 </div>
