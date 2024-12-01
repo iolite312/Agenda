@@ -23,8 +23,7 @@ class LoginRepository extends DatabaseRepository
             return ResponseEnum::NOT_FOUND;
         }
         if (password_verify($password . $result["salt"], $result['password'])) {
-            Session::set('user_id', $result['id']);
-            Session::set('name', $result['name']);
+            Session::set('user', ['id' => $result['id'], 'name' => $result['name']]);
             return ResponseEnum::SUCCESS;
         } else {
             return ResponseEnum::ERROR;
