@@ -1,10 +1,3 @@
 <div>
-    <h1>Hi</h1>
-    <?
-    foreach ($databases as $database) {
-        echo "<p>{$database->Database}</p>";
-    }
-    use App\Application\Session;
-    var_dump(Session::getAll());
-    ?>
+    <h1>Homepage</h1>
 </div>
