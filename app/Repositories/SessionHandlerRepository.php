@@ -5,13 +5,11 @@ namespace App\Repositories;
 class SessionHandlerRepository extends DatabaseRepository
 {
     private \PDO $pdo;
-    private $table;
 
-    public function __construct($table = 'sessions')
+    public function __construct()
     {
         parent::__construct();
         $this->pdo = $this->getConnection();
-        $this->table = $table;
     }
 
     public function read($sessionId)
