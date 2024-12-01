@@ -1,3 +1,13 @@
 <div>
     <h1>Homepage</h1>
+    <?
+    use app\Application\Session;
+    if (Session::get('user_id')) {
+        echo "You are logged in as " . Session::get('name');
+        echo '<form action="/logout" method="post">
+                <button type="submit">Logout</button>
+            </form>';
+    }
+    ?>
+
 </div>
