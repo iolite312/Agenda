@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Application\Request;
-use App\Application\Response;
 use App\Middleware\MiddlewareInterface;
 
 class Route
@@ -28,6 +26,7 @@ class Route
                 return false;
             }
         }
+
         return true;
     }
 }

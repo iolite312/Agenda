@@ -14,9 +14,9 @@ class DatabaseRepository
 
     public function __construct()
     {
-        $this->host = $_ENV['MYSQL_HOST'] ?: "mysql";
+        $this->host = $_ENV['MYSQL_HOST'] ?: 'mysql';
         $this->port = $_ENV['MYSQL_PORT'] ?: 3306;
-        $this->username = "root";
+        $this->username = 'root';
         $this->password = $_ENV['MYSQL_PASSWORD'];
         $this->database = $_ENV['MYSQL_DATABASE'];
     }

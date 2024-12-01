@@ -11,12 +11,14 @@ class PageLoader
     public function setLayout(string $layoutName): self
     {
         $this->layout = $layoutName;
+
         return $this;
     }
 
     public function setPage(string $pageName): self
     {
         $this->page = $pageName;
+
         return $this;
     }
 

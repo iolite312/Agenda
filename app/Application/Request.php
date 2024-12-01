@@ -11,6 +11,7 @@ class Request
         if ($position === false) {
             return $path;
         }
+
         return substr($path, 0, $position);
     }
 

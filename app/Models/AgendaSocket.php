@@ -14,7 +14,7 @@ class AgendaSocket implements MessageComponentInterface
 
     public function __construct()
     {
-        $this->clients = new \SplObjectStorage;
+        $this->clients = new \SplObjectStorage();
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -30,7 +30,7 @@ class AgendaSocket implements MessageComponentInterface
         if ($sessionId) {
             Session::start($sessionId);
             echo json_encode(Session::getAll()) . "\n";
-            Session::set("test2", "redis");
+            Session::set('test2', 'redis');
             echo json_encode(Session::getAll()) . "\n";
         }
         echo "New connection! ({$conn->resourceId})\n";
@@ -40,14 +40,13 @@ class AgendaSocket implements MessageComponentInterface
     {
         $numRecv = count($this->clients) - 1;
         echo sprintf(
-            'Connection %d sending message "%s" to %d other connection%s' . "\n"
-            ,
+            'Connection %d sending message "%s" to %d other connection%s' . "\n",
             $from->resourceId,
             $msg,
             $numRecv,
             $numRecv == 1 ? '' : 's'
         );
-        echo Session::get("test2") . "\n";
+        echo Session::get('test2') . "\n";
 
         foreach ($this->clients as $client) {
             if ($from !== $client) {

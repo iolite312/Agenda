@@ -1,6 +1,7 @@
 <?php
+
 error_reporting(E_ALL & ~E_DEPRECATED);
-require "../vendor/autoload.php";
+require '../vendor/autoload.php';
 
 $app = App\Application\Application::getInstance();
 $router = App\Application\Router::getInstance();

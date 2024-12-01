@@ -2,8 +2,8 @@
 
 namespace App\Middleware;
 
-use App\Application\Response;
 use App\Application\Session;
+use App\Application\Response;
 
 class EnsureValidLogin implements MiddlewareInterface
 {
@@ -11,8 +11,10 @@ class EnsureValidLogin implements MiddlewareInterface
     {
         if (!Session::get('user')) {
             Response::redirect('/login');
+
             return false;
         }
+
         return true;
     }
 }

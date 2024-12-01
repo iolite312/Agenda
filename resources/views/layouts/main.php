@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda - <? echo $page; ?></title>
+    <title>Agenda - <?php echo $page; ?></title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/sidebar.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -123,9 +123,9 @@
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/assets/images/<? echo App\Application\Session::get('user')->profilePicture ?>" alt=""
+                    <img src="/assets/images/<?php echo App\Application\Session::get('user')->profilePicture; ?>" alt=""
                         width="32" height="32" class="rounded-circle me-2">
-                    <strong><? echo App\Application\Session::get('user')->fullName ?></strong>
+                    <strong><?php echo App\Application\Session::get('user')->fullName; ?></strong>
                 </a>
                 <ul class="dropdown-menu text-small shadow">
                     <li><a class="dropdown-item" href="#">Settings</a></li>

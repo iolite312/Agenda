@@ -5,7 +5,7 @@ use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
 
-require "/app/vendor/autoload.php";
+require '/app/vendor/autoload.php';
 
 error_reporting(E_ALL & ~E_DEPRECATED);
 

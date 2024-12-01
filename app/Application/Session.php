@@ -2,8 +2,8 @@
 
 namespace App\Application;
 
-use App\Repositories\SessionHandlerRepository;
 use Ramsey\Uuid\Uuid;
+use App\Repositories\SessionHandlerRepository;
 
 class Session
 {
@@ -11,7 +11,7 @@ class Session
     private static array $data = [];
     private static SessionHandlerRepository $handler;
 
-    public static function start(string $sessionId = null): void
+    public static function start(?string $sessionId = null): void
     {
         self::$handler = new SessionHandlerRepository();
         self::$sessionId = $sessionId;
@@ -25,7 +25,7 @@ class Session
             // Generate a new session ID if no cookie is set
             self::$sessionId = Uuid::uuid4()->toString();
             self::$handler->writeNewSession(self::$sessionId);
-            setcookie("PHPSESSIDC", self::$sessionId, time() + 3600, "/");
+            setcookie('PHPSESSIDC', self::$sessionId, time() + 3600, '/');
         }
     }
 
@@ -34,7 +34,7 @@ class Session
         if (self::$sessionId) {
             // Clear session data
             self::$handler->destroy(self::$sessionId);
-            setcookie("PHPSESSIDC", "", time() - 3600, "/");
+            setcookie('PHPSESSIDC', '', time() - 3600, '/');
             self::$sessionId = null;
             self::$data = [];
         }

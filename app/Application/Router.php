@@ -23,6 +23,7 @@ class Router
         if (!isset(self::$instance)) {
             self::$instance = new Router();
         }
+
         return self::$instance;
     }
 
@@ -46,7 +47,7 @@ class Router
     public function resolve(): void
     {
         // Initialize the session
-        \App\Application\Session::start();
+        Session::start();
         $uri = $this->request->getPath();
         $method = $this->request->getMethod();
         $route = $this->routeExists($uri, $method);
@@ -55,18 +56,19 @@ class Router
             $this->response->setStatusCode(404);
             $this->response->setContent('404 Not Found');
         } else {
-            $route->callback[0] = new $route->callback[0];
+            $route->callback[0] = new $route->callback[0]();
             $content = call_user_func($route->callback, $this->request, $this->response);
             $this->response->setContent($content);
         }
         $this->response->send();
     }
 
-    private function routeExists($uri, $method): Route|null
+    private function routeExists($uri, $method): ?Route
     {
         $routes = array_filter($this->routes, function ($route) use ($uri, $method) {
             return $route->uri === $uri && $route->method === $method;
         });
+
         return !empty($routes) ? current($routes) : null;
     }
 
@@ -74,5 +76,4 @@ class Router
     {
         return new Route($uri, $method, $callback, $this->middlewares);
     }
-
 }

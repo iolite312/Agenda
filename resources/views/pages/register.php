@@ -3,7 +3,7 @@
     <form action="/register" method="post">
         <img class="mb-4" src="/assets/images/calendar_31_2x.png" alt="">
         <h1 class="h3 mb-3 fw-normal">Register</h1>
-        <?
+        <?php
         if (isset($error)) {
             echo "<div class=\"alert alert-danger\" role=\"alert\">$error</div>";
         }
@@ -11,28 +11,28 @@
 
         <div class="form-floating">
             <input type="text" class="form-control" id="firstNameInput" placeholder="Jhon" name="firstName"
-                value="<?php echo isset($fields['firstName']) ? $fields['firstName'] : ''; ?>">
+                value="<?php echo $fields['firstName'] ?? ''; ?>">
             <label for="firstNameInput">Firstname</label>
         </div>
         <div class="form-floating">
             <input type="text" class="form-control" id="lastNameInput" placeholder="Doe" name="lastName"
-                value="<?php echo isset($fields['lastName']) ? $fields['lastName'] : ''; ?>">
+                value="<?php echo $fields['lastName'] ?? ''; ?>">
             <label for="lastNameInput">Lastname</label>
         </div>
         <div class="form-floating">
             <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email"
-                value="<?php echo isset($fields['email']) ? $fields['email'] : ''; ?>">
+                value="<?php echo $fields['email'] ?? ''; ?>">
             <label for="floatingInput">Email address</label>
         </div>
         <div class="form-floating">
             <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password"
-                value="<?php echo isset($fields['password']) ? $fields['password'] : ''; ?>">
+                value="<?php echo $fields['password'] ?? ''; ?>">
             <label for="floatingPassword">Password</label>
         </div>
         <div class="form-floating">
             <input type="password" class="form-control" id="floatingConfirmPassword" placeholder="confirmPassword"
                 name="confirmPassword"
-                value="<?php echo isset($fields['confirmPassword']) ? $fields['confirmPassword'] : ''; ?>">
+                value="<?php echo $fields['confirmPassword'] ?? ''; ?>">
             <label for="floatingPassword">Confirm password</label>
         </div>
 

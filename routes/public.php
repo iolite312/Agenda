@@ -1,8 +1,8 @@
 <?php
 
 use App\Application\Router;
-use App\Middleware\EnsureInvalidLogin;
 use App\Middleware\EnsureValidLogin;
+use App\Middleware\EnsureInvalidLogin;
 
 $router = Router::getInstance();
 
