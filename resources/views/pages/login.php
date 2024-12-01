@@ -1,4 +1,5 @@
 <main class="form-signin w-100 m-auto">
+    <link rel="stylesheet" href="/assets/css/login.css">
     <form action="/login" method="post">
         <img class="mb-4" src="/assets/images/calendar_31_2x.png" alt="">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
@@ -26,6 +27,7 @@
             </label>
         </div> -->
         <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-body-secondary">© 2024–2024</p>
+        <p class="my-3 text-body-secondary">Don't have an account? <a href="/register">Sign up</a></p>
+        <p class="mb-3 text-body-secondary">&copy; 2024&hyphen;2024</p>
     </form>
 </main>
