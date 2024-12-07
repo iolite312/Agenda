@@ -24,6 +24,15 @@ class RegisterRepository extends DatabaseRepository
         try {
             $this->pdo->beginTransaction();
 
+            $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt->execute([
+                ':email' => $email,
+            ]);
+
+            if ($stmt->rowCount() > 0) {
+                return ResponseEnum::ALREADY_EXISTS;
+            }
+
             $stmt = $this->pdo->prepare('INSERT INTO users (first_name, last_name, email, password, salt, profile_picture) VALUES (:first_name, :last_name, :email, :password, :salt, :profile_picture)');
             $salt = StringGenerator::generateRandomString();
             $password = password_hash($password . $salt, PASSWORD_BCRYPT, ['cost' => 12]);
@@ -61,9 +70,8 @@ class RegisterRepository extends DatabaseRepository
             return ResponseEnum::SUCCESS;
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            echo 'Error: ' . $e->getMessage();
 
-            return ResponseEnum::ERROR;
+            return ResponseEnum::UNKOWN;
         }
 
     }

@@ -41,6 +41,8 @@ class RegisterController extends Controller
         $result = $this->registerRepository->register($firstName, $lastName, $email, $password);
         if ($result === ResponseEnum::SUCCESS) {
             Response::redirect('/');
+        } elseif ($result === ResponseEnum::ALREADY_EXISTS) {
+            return $this->rerender(['error' => 'Email already exists', 'page' => 'register', 'fields' => $_POST]);
         } else {
             return $this->rerender(['error' => 'Something went wrong', 'page' => 'register', 'fields' => $_POST]);
         }
