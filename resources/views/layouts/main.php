@@ -27,10 +27,23 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/" class="nav-link active" aria-current="page">
+                    <a href="/" class="nav-link <? echo $page == 'home' ? 'active' : '' ?> link-light"
+                        aria-current="page">
                         Home
                     </a>
                 </li>
+                <?php
+                foreach ($agendas as $agenda) {
+                    if (!$agenda->personal_agenda) {
+                        continue;
+                    }
+                    echo '<li class="nav-item">
+                            <a href="/agenda/' . $agenda->id . '" class="nav-link link-light">
+                                Personal Agenda
+                            </a>
+                        </li>';
+                }
+                ?>
             </ul>
             <!-- <hr>
             <ul class="list-unstyled ps-0">
