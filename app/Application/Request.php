@@ -4,6 +4,8 @@ namespace App\Application;
 
 class Request
 {
+    private static array $params = [];
+
     public static function getPath(): string
     {
         $path = $_SERVER['REQUEST_URI'] ?? '/';
@@ -22,11 +24,26 @@ class Request
 
     public static function getPostField(string $field): string
     {
-        return $_POST[$field] ?? [];
+        return $_POST[$field] ?? '';
     }
 
     public static function getSession(): array
     {
         return $_SESSION ?? [];
+    }
+
+    public static function setParams(array $params): void
+    {
+        self::$params = $params;
+    }
+
+    public static function getParams(): array
+    {
+        return self::$params;
+    }
+
+    public static function getParam(string $key, $default = null)
+    {
+        return self::$params[$key] ?? $default;
     }
 }

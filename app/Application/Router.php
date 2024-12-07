@@ -65,12 +65,16 @@ class Router
 
     private function routeExists($uri, $method): ?Route
     {
-        $routes = array_filter($this->routes, function ($route) use ($uri, $method) {
-            return $route->uri === $uri && $route->method === $method;
-        });
+        foreach ($this->routes as $route) {
+            if ($route->method === $method && $route->match($uri)) {
+                $this->request->setParams($route->extractParameters($uri));
+                return $route;
+            }
+        }
 
-        return !empty($routes) ? current($routes) : null;
+        return null;
     }
+
 
     private function constructRoute($uri, $method, $callback)
     {
