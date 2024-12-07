@@ -38,7 +38,7 @@
                         continue;
                     }
                     echo '<li class="nav-item">
-                            <a href="/agenda/' . $agenda->id . '" class="nav-link link-light">
+                            <a href="/agenda/' . $agenda->id . '" class="nav-link ' . ($page == 'agenda' && $id == $agenda->id ? 'active' : '') . ' link-light">
                                 Personal Agenda
                             </a>
                         </li>';
