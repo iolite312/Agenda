@@ -1,7 +1,7 @@
 <main class="form-signin w-100 m-auto">
     <link rel="stylesheet" href="/assets/css/login.css">
     <form action="/login" method="post">
-        <img class="mb-4" src="/assets/images/calendar_31_2x.png" alt="">
+        <img id="logo" class="mb-4" src="/assets/images/Logo.svg" alt="Logo">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
         <?php
         if (isset($error)) {

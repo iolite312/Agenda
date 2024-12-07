@@ -1,7 +1,7 @@
 <main class="form-signin w-100 m-auto">
     <link rel="stylesheet" href="/assets/css/register.css">
     <form action="/register" method="post">
-        <img class="mb-4" src="/assets/images/calendar_31_2x.png" alt="">
+        <img id="logo" class="mb-4" src="/assets/images/Logo.svg" alt="Logo">
         <h1 class="h3 mb-3 fw-normal">Register</h1>
         <?php
         if (isset($error)) {
@@ -31,8 +31,7 @@
         </div>
         <div class="form-floating">
             <input type="password" class="form-control" id="floatingConfirmPassword" placeholder="confirmPassword"
-                name="confirmPassword"
-                value="<?php echo $fields['confirmPassword'] ?? ''; ?>">
+                name="confirmPassword" value="<?php echo $fields['confirmPassword'] ?? ''; ?>">
             <label for="floatingPassword">Confirm password</label>
         </div>
 
