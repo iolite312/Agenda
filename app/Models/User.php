@@ -4,13 +4,13 @@ namespace App\Models;
 
 class User
 {
-    public $id;
-    public $firstName;
-    public $lastName;
-    public $email;
-    public $profilePicture;
+    public int $id;
+    public string $firstName;
+    public string $lastName;
+    public string $email;
+    public string $profilePicture;
 
-    public $fullName {
+    public string $fullName {
         get => "{$this->firstName} {$this->lastName}";
     }
 
