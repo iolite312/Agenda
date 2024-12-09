@@ -15,10 +15,12 @@ class AgendaController extends Controller
         parent::__construct();
         $this->agendaRepository = new AgendaRepository();
     }
+
     public function index()
     {
-        $id = Request::getParam("id");
+        $id = Request::getParam('id');
         $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+
         return $this->pageLoader->setPage('agenda')->render(['page' => 'agenda', 'id' => $id, 'agendas' => $agendas]);
     }
 }

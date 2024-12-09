@@ -68,13 +68,13 @@ class Router
         foreach ($this->routes as $route) {
             if ($route->method === $method && $route->match($uri)) {
                 $this->request->setParams($route->extractParameters($uri));
+
                 return $route;
             }
         }
 
         return null;
     }
-
 
     private function constructRoute($uri, $method, $callback)
     {

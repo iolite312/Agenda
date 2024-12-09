@@ -27,7 +27,7 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/" class="nav-link <? echo $page == 'home' ? 'active' : '' ?> link-light"
+                    <a href="/" class="nav-link <?php echo $page == 'home' ? 'active' : ''; ?> link-light"
                         aria-current="page">
                         Home
                     </a>
@@ -43,7 +43,7 @@
                             </a>
                         </li>';
                 }
-                ?>
+    ?>
             </ul>
             <!-- <hr>
             <ul class="list-unstyled ps-0">

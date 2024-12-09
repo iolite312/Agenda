@@ -2,12 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Application\Request;
-use App\Application\Response;
-use App\Application\Session;
-use App\Helpers\SaveFile;
-use App\Repositories\AgendaRepository;
 use Ramsey\Uuid\Uuid;
+use App\Application\Request;
+use App\Application\Session;
+use App\Repositories\AgendaRepository;
 
 class ProfileController extends Controller
 {
@@ -22,6 +20,7 @@ class ProfileController extends Controller
     public function index()
     {
         $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+
         return $this->pageLoader->setPage('profile')->render(['page' => 'profile', 'agendas' => $agendas]);
     }
 
@@ -52,10 +51,10 @@ class ProfileController extends Controller
                     echo $newAvatarName;
                     // return ["type" => ResponseEnum::SUCCESS, "name" => $newAvatarName];
                 } else {
-                    echo "Failed to save image.";
+                    echo 'Failed to save image.';
                 }
             } else {
-                return "Invalid base64 image type.";
+                return 'Invalid base64 image type.';
             }
         } else {
             var_dump($matches);
@@ -68,6 +67,7 @@ class ProfileController extends Controller
     {
         $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
         $paramaters['agendas'] = $agendas;
+
         return $this->pageLoader->setPage('profile')->render($paramaters);
     }
 }
