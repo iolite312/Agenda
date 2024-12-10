@@ -24,7 +24,7 @@ class Request
 
     public static function getPostField(string $field): string
     {
-        return $_POST[$field] ?? '';
+        return htmlspecialchars($_POST[$field]) ?? '';
     }
 
     public static function getSession(): array
