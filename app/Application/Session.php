@@ -25,7 +25,7 @@ class Session
             // Generate a new session ID if no cookie is set
             self::$sessionId = Uuid::uuid4()->toString();
             self::$handler->writeNewSession(self::$sessionId);
-            setcookie('PHPSESSIDC', self::$sessionId, time() + 3600, '/');
+            setcookie('PHPSESSIDC', self::$sessionId, time() + 3600 * 24, '/');
         }
     }
 

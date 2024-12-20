@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Enums\ResponseEnum;
+use App\Helpers\SaveFile;
+use App\Repositories\ProfileRepository;
 use Ramsey\Uuid\Uuid;
 use App\Application\Request;
 use App\Application\Session;
@@ -10,11 +13,13 @@ use App\Repositories\AgendaRepository;
 class ProfileController extends Controller
 {
     private AgendaRepository $agendaRepository;
+    private ProfileRepository $profileRepository;
 
     public function __construct()
     {
         parent::__construct();
         $this->agendaRepository = new AgendaRepository();
+        $this->profileRepository = new ProfileRepository();
     }
 
     public function index()
@@ -34,30 +39,34 @@ class ProfileController extends Controller
         $password = Request::getPostField('password');
         $confirmPassword = Request::getPostField('confirmPassword');
 
-        $base64String = $avatarData;
-        $data = explode(',', $base64String);
-        // die();
-        if (count($data) === 2 && preg_match('/^data:image\/(\w+);base64/', $data[0], $matches) === 1) {
-            $imageType = $matches[1];
-            $allowedTypes = ['png', 'jpeg', 'jpg', 'gif'];
+        if (!is_null($password) && $password !== $confirmPassword) {
+            return $this->rerender(['error' => 'Passwords do not match', 'page' => 'Profile', 'fields' => $_POST]);
+        }
 
-            if (in_array($imageType, $allowedTypes)) {
-                $imageData = base64_decode($data[1]);
-                $newAvatarName = Uuid::uuid4()->toString() . '.' . $imageType;
-                $uploadDir = '/app/public/assets/images/uploads/';
-                $destination = $uploadDir . $newAvatarName;
-
-                if (file_put_contents($destination, $imageData)) {
-                    echo $newAvatarName;
-                    // return ["type" => ResponseEnum::SUCCESS, "name" => $newAvatarName];
-                } else {
-                    echo 'Failed to save image.';
-                }
-            } else {
-                return 'Invalid base64 image type.';
-            }
+        $result = SaveFile::saveFile($avatarData);
+        if ($result['type'] === ResponseEnum::SUCCESS) {
+            SaveFile::deleteFile($user->profilePicture);
+            $user->profilePicture = $result["name"];
         } else {
-            var_dump($matches);
+            return $this->rerender(['error' => $result['Error'], 'page' => 'profile', 'fields' => $_POST]);
+        }
+
+        $result = $this->profileRepository->updateProfile([
+            'id' => $user->id,
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'email' => $email,
+            'profile_picture' => $user->profilePicture,
+            'password' => $password
+        ]);
+
+        if ($result === ResponseEnum::SUCCESS) {
+            $user->firstName = $firstName;
+            $user->lastName = $lastName;
+            $user->email = $email;
+            Session::set('user', $user);
+        } else {
+            return $this->rerender(['error' => "Something went wrong", 'page' => 'profile', 'fields' => $_POST]);
         }
 
         return $this->rerender(['page' => 'profile']);

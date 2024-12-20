@@ -43,7 +43,7 @@
                             </a>
                         </li>';
                 }
-    ?>
+                ?>
             </ul>
             <!-- <hr>
             <ul class="list-unstyled ps-0">
@@ -136,8 +136,8 @@
             <div class="dropdown">
                 <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/assets/images/<?php echo App\Application\Session::get('user')->profilePicture; ?>" alt=""
-                        width="32" height="32" class="rounded-circle me-2">
+                    <img src="/assets/images/uploads/<?php echo App\Application\Session::get('user')->profilePicture; ?>"
+                        alt="" width="32" height="32" class="rounded-circle me-2">
                     <strong><?php echo App\Application\Session::get('user')->fullName; ?></strong>
                 </a>
                 <ul class="dropdown-menu text-small shadow">

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Helpers\PasswordGenerator;
 use App\Models\User;
 use App\Enums\ResponseEnum;
 use App\Application\Session;
@@ -34,14 +35,13 @@ class RegisterRepository extends DatabaseRepository
             }
 
             $stmt = $this->pdo->prepare('INSERT INTO users (first_name, last_name, email, password, salt, profile_picture) VALUES (:first_name, :last_name, :email, :password, :salt, :profile_picture)');
-            $salt = StringGenerator::generateRandomString();
-            $password = password_hash($password . $salt, PASSWORD_BCRYPT, ['cost' => 12]);
+            $result = PasswordGenerator::hashPassword($password);
             $stmt->execute([
                 ':first_name' => $firstName,
                 ':last_name' => $lastName,
                 ':email' => $email,
-                ':password' => $password,
-                ':salt' => $salt,
+                ':password' => $result['password'],
+                ':salt' => $result['salt'],
                 ':profile_picture' => 'placeholder.jpg',
             ]);
 

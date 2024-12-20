@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const upload = document.getElementById("upload");
-  const editButton = document.getElementById("editButton");
+  const removeButton = document.getElementById("removeButton");
   const modal = document.getElementById("modal");
   const saveButton = document.getElementById("saveButton");
   const slider = document.getElementById("slider");
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let offsetY = 0;
   let isDragging = false;
   let startX, startY;
+  let lastPreviewSrc = preview.src;
 
   const drawImage = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -69,9 +70,20 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Open modal for editing
-  editButton.addEventListener("click", () => {
+  removeButton.addEventListener("click", () => {
+    if (image.src) {
+      removeButton.setAttribute("disabled", true);
+      image = new Image();
+      hiddenInput.value = "";
+      upload.value = "";
+      preview.src = lastPreviewSrc;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  });
+
+  avatarContainer.addEventListener("click", () => {
     if (!image.src) {
-      alert("Please upload an image first!");
+      upload.click();
     } else {
       // Use Bootstrap's Modal API to hide it
       let modalInstance = bootstrap.Modal.getInstance(modal); // Get the modal instance
@@ -80,10 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       modalInstance.show(); // Dismiss the modal
     }
-  });
-
-  avatarContainer.addEventListener("click", () => {
-    upload.click();
   });
 
   upload.addEventListener("change", function () {
@@ -98,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       reader.readAsDataURL(file); // Read the file as a data URL
     }
+    removeButton.removeAttribute("disabled");
   });
 
   // Save cropped avatar to preview
