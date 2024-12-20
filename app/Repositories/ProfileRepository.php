@@ -27,7 +27,7 @@ class ProfileRepository extends DatabaseRepository
                     'profile_picture' => $profile['profile_picture'],
                     'id' => $profile['id'],
                 ]);
-
+                echo "1";
                 return ResponseEnum::SUCCESS;
             }
             $result = PasswordGenerator::hashPassword($profile['password']);

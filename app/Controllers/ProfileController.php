@@ -41,13 +41,15 @@ class ProfileController extends Controller
         if (!is_null($password) && $password !== $confirmPassword) {
             return $this->rerender(['error' => 'Passwords do not match', 'page' => 'Profile', 'fields' => $_POST]);
         }
-
-        $result = SaveFile::saveFile($avatarData);
-        if ($result['type'] === ResponseEnum::SUCCESS) {
-            SaveFile::deleteFile($user->profilePicture);
-            $user->profilePicture = $result['name'];
-        } else {
-            return $this->rerender(['error' => $result['Error'], 'page' => 'profile', 'fields' => $_POST]);
+        // echo $avatarData;
+        if (!empty($avatarData)) {
+            $result = SaveFile::saveFile($avatarData);
+            if ($result['type'] === ResponseEnum::SUCCESS) {
+                SaveFile::deleteFile($user->profilePicture);
+                $user->profilePicture = $result['name'];
+            } else {
+                return $this->rerender(['error' => $result['Error'], 'page' => 'profile', 'fields' => $_POST]);
+            }
         }
 
         $result = $this->profileRepository->updateProfile([
