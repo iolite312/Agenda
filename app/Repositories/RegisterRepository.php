@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Helpers\PasswordGenerator;
 use App\Models\User;
 use App\Enums\ResponseEnum;
 use App\Application\Session;
 use App\Enums\AgendaRolesEnum;
-use App\Helpers\StringGenerator;
+use App\Helpers\PasswordGenerator;
 use App\Enums\InvitationsStatusEnum;
 
 class RegisterRepository extends DatabaseRepository

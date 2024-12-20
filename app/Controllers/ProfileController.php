@@ -2,13 +2,12 @@
 
 namespace App\Controllers;
 
-use App\Enums\ResponseEnum;
 use App\Helpers\SaveFile;
-use App\Repositories\ProfileRepository;
-use Ramsey\Uuid\Uuid;
+use App\Enums\ResponseEnum;
 use App\Application\Request;
 use App\Application\Session;
 use App\Repositories\AgendaRepository;
+use App\Repositories\ProfileRepository;
 
 class ProfileController extends Controller
 {
@@ -46,7 +45,7 @@ class ProfileController extends Controller
         $result = SaveFile::saveFile($avatarData);
         if ($result['type'] === ResponseEnum::SUCCESS) {
             SaveFile::deleteFile($user->profilePicture);
-            $user->profilePicture = $result["name"];
+            $user->profilePicture = $result['name'];
         } else {
             return $this->rerender(['error' => $result['Error'], 'page' => 'profile', 'fields' => $_POST]);
         }
@@ -57,7 +56,7 @@ class ProfileController extends Controller
             'lastName' => $lastName,
             'email' => $email,
             'profile_picture' => $user->profilePicture,
-            'password' => $password
+            'password' => $password,
         ]);
 
         if ($result === ResponseEnum::SUCCESS) {
@@ -66,7 +65,7 @@ class ProfileController extends Controller
             $user->email = $email;
             Session::set('user', $user);
         } else {
-            return $this->rerender(['error' => "Something went wrong", 'page' => 'profile', 'fields' => $_POST]);
+            return $this->rerender(['error' => 'Something went wrong', 'page' => 'profile', 'fields' => $_POST]);
         }
 
         return $this->rerender(['page' => 'profile']);

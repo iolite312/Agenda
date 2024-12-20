@@ -22,15 +22,16 @@ class SaveFile
                 $destination = "{$uploadDir}{$newAvatarName}";
 
                 if (file_put_contents($destination, $imageData)) {
-                    return ["type" => ResponseEnum::SUCCESS, "name" => $newAvatarName];
+                    return ['type' => ResponseEnum::SUCCESS, 'name' => $newAvatarName];
                 } else {
-                    return ["type" => ResponseEnum::ERROR, "Error" => 'Failed to save image.'];
+                    return ['type' => ResponseEnum::ERROR, 'Error' => 'Failed to save image.'];
                 }
             } else {
-                return ["type" => ResponseEnum::UNKOWN, "Error" => 'Internal Server Error'];
+                return ['type' => ResponseEnum::UNKOWN, 'Error' => 'Internal Server Error'];
             }
         }
     }
+
     public static function deleteFile($file)
     {
         $uploadDir = '/app/public/assets/images/uploads/';
