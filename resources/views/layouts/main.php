@@ -37,13 +37,14 @@
                     if (!$agenda->personal_agenda) {
                         continue;
                     }
+                    App\Application\Session::set('personal_agenda', $agenda->id);
                     echo '<li class="nav-item">
                             <a href="/agenda/' . $agenda->id . '" class="nav-link ' . ($page == 'agenda' && $id == $agenda->id ? 'active' : '') . ' link-light">
                                 Personal Agenda
                             </a>
                         </li>';
                 }
-    ?>
+                ?>
             </ul>
             <!-- <hr>
             <ul class="list-unstyled ps-0">
