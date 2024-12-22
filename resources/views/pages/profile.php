@@ -51,7 +51,7 @@
             </div>
             <div class="form-floating my-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" name="email"
-                    value="<?php echo App\Application\Session::get('user')->email; ?>">
+                    value="<?php echo App\Application\Session::get('user')->email; ?>" disabled>
                 <label for="floatingInput">Email address</label>
             </div>
             <div class="form-floating my-3">
