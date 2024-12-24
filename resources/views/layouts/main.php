@@ -62,8 +62,9 @@
             <hr>
             <ul class="nav nav-pills flex-column">
                 <li class="nav-item">
-                    <button class="nav-link link-light" data-bs-toggle="modal" data-bs-target="#newAgendaModal">Create
-                        New Agenda</button>
+                    <button class="nav-link link-light" data-bs-toggle="modal" data-bs-target="#newAgendaModal">
+                        Create New Agenda
+                    </button>
                 </li>
             </ul>
             <hr>
