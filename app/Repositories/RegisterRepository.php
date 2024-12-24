@@ -54,7 +54,7 @@ class RegisterRepository extends DatabaseRepository
 
             $agendaId = $this->pdo->lastInsertId();
 
-            $stmt = $this->pdo->prepare('INSERT INTO user_agenda (user_id, agenda_id, role, accepted) VALUES (:user_id, :agenda_id, :role, :accepted)');
+            $stmt = $this->pdo->prepare('INSERT INTO user_agenda (user_id, agenda_id, personal_agenda, role, accepted) VALUES (:user_id, :agenda_id, 1, :role, :accepted)');
             $stmt->execute([
                 ':user_id' => $userId,
                 ':agenda_id' => $agendaId,
