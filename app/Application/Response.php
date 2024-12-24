@@ -23,6 +23,11 @@ class Response
         echo $this->content;
     }
 
+    public static function setHeader(string $name, string $value): void
+    {
+        header("$name: $value");
+    }
+
     public static function redirect(string $url): void
     {
         header("Location: $url");

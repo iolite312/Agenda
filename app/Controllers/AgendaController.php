@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Application\Request;
+use App\Application\Response;
 use App\Application\Session;
 use App\Repositories\AgendaRepository;
 
@@ -18,9 +19,22 @@ class AgendaController extends Controller
 
     public function index()
     {
-        $id = Request::getParam('id');
+        $agendaId = Request::getParam('id');
         $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
 
-        return $this->pageLoader->setPage('agenda')->render(['page' => 'agenda', 'id' => $id, 'agendas' => $agendas]);
+        return $this->pageLoader->setPage('agenda')->render(['page' => 'agenda', 'id' => $agendaId, 'agendas' => $agendas]);
+    }
+    public function getAgendaAppointments()
+    {
+        $appointments = [];
+        $agendaId = Request::getParam('id');
+        $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+        foreach ($agendas as $key => $value) {
+            if ($value->id == $agendaId) {
+                $appointments = $this->agendaRepository->getAgendaAppointments($value);
+            }
+        }
+        Response::setHeader('Content-Type', 'application/json');
+        return json_encode($appointments);
     }
 }

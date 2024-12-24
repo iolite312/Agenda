@@ -18,4 +18,5 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->get('/profile', [App\Controllers\ProfileController::class, 'index']);
     $router->post('/profile', [App\Controllers\ProfileController::class, 'saveProfile']);
     $router->get('/agenda/{id}', [App\Controllers\AgendaController::class, 'index']);
+    $router->get('/api/agenda/{id}/appointments', [App\Controllers\AgendaController::class, 'getAgendaAppointments']);
 });

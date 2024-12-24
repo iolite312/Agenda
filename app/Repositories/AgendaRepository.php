@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Appointments;
 use App\Models\User;
 use App\Models\Agenda;
 
@@ -37,5 +38,26 @@ class AgendaRepository extends DatabaseRepository
         }
 
         return $agendas;
+    }
+
+    public function getAgendaAppointments(Agenda $agenda)
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM `agenda_items` WHERE agenda_id = :id'
+        );
+        $stmt->execute([
+            ':id' => $agenda->id,
+        ]);
+
+        $rawAppointments = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $appointments = [];
+        foreach ($rawAppointments as $raw) {
+            $appointment = Appointments::fromDatabase($raw);
+
+            $appointments[] = $appointment;
+        }
+
+        return $appointments;
     }
 }
