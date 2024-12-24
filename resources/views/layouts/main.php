@@ -46,6 +46,12 @@
                 }
                 ?>
             </ul>
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <button class="nav-link link-light" data-bs-toggle="modal" data-bs-target="#newAgendaModal">Create
+                        New Agenda</button>
+                </li>
+            </ul>
             <!-- <hr>
             <ul class="list-unstyled ps-0">
                 <li class="mb-1">
@@ -152,6 +158,34 @@
         </div>
         <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             {{content}}
+        </div>
+    </div>
+    <div class="modal fade" id="newAgendaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create new agenda</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/agenda/create" method="post">
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInput" name="agendaName"
+                                placeholder="Agenda name">
+                            <label for="floatingInput">Agenda Name</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingAgendaDescription"
+                                name="agendaDescription" placeholder="Agenda description">
+                            <label for="floatingAgendaDescription">Agenda Description</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create agenda</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </body>
