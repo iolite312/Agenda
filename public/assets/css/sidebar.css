@@ -49,3 +49,15 @@
 .scrollarea {
     overflow-y: auto;
 }
+
+.resize-button {
+    flex-grow: 0 !important;
+}
+
+.resize-button:not(.btn-primary) {
+    opacity: 0 !important;
+}
+
+.btn-group:hover>.resize-button {
+    opacity: 1 !important;
+}
