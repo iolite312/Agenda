@@ -93,4 +93,31 @@ class AgendaRepository extends DatabaseRepository
             return $e->getMessage();
         }
     }
+
+    public function deleteAgenda($id)
+    {
+        try {
+            $this->pdo->beginTransaction();
+            $stmt = $this->pdo->prepare('DELETE FROM agenda_items WHERE agenda_id = :id');
+            $stmt->execute([
+                ':id' => $id,
+            ]);
+            $stmt = $this->pdo->prepare('DELETE FROM user_agenda WHERE agenda_id = :id');
+            $stmt->execute([
+                ':id' => $id,
+            ]);
+            $stmt = $this->pdo->prepare(
+                'DELETE FROM `agendas` WHERE id = :id'
+            );
+            $stmt->execute([
+                ':id' => $id,
+            ]);
+
+            $this->pdo->commit();
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            return $e->getMessage();
+        }
+    }
 }

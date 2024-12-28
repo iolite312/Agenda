@@ -50,8 +50,20 @@ class AgendaController extends Controller
             return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas]);
         } else {
             $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
-            return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'errors' => $result]);
+            return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'errors' => [$result]]);
         }
+    }
 
+    public function deleteAgenda()
+    {
+        $agendaId = Request::getParam('id');
+        $result = $this->agendaRepository->deleteAgenda($agendaId);
+        if ($result === ResponseEnum::SUCCESS) {
+            $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+            return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'success' => 'Agenda deleted successfully']);
+        } else {
+            $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+            return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'errors' => [$result]]);
+        }
     }
 }
