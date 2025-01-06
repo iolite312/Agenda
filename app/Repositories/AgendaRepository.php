@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Enums\AgendaRolesEnum;
-use App\Enums\InvitationsStatusEnum;
-use App\Enums\ResponseEnum;
-use App\Models\Appointments;
 use App\Models\User;
 use App\Models\Agenda;
+use App\Enums\ResponseEnum;
+use App\Models\Appointments;
+use App\Enums\AgendaRolesEnum;
+use App\Enums\InvitationsStatusEnum;
 
 class AgendaRepository extends DatabaseRepository
 {
@@ -90,6 +90,7 @@ class AgendaRepository extends DatabaseRepository
             return ResponseEnum::SUCCESS;
         } catch (\Exception $e) {
             $this->pdo->rollBack();
+
             return $e->getMessage();
         }
     }
@@ -114,9 +115,11 @@ class AgendaRepository extends DatabaseRepository
             ]);
 
             $this->pdo->commit();
+
             return ResponseEnum::SUCCESS;
         } catch (\Exception $e) {
             $this->pdo->rollBack();
+
             return $e->getMessage();
         }
     }

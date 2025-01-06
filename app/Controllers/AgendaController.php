@@ -36,6 +36,7 @@ class AgendaController extends Controller
                 $appointments = $this->agendaRepository->getAgendaAppointments($value);
             }
         }
+
         return Response::json($appointments);
     }
 
