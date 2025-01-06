@@ -1,4 +1,4 @@
-<main class="form-signin m-auto vh-100 d-flex flex-column justify-content-center">
+<main class="m-auto vh-100 d-flex flex-column justify-content-center">
     <link rel="stylesheet" href="/assets/css/avatarEditor.css">
     <form action="/profile" method="post" enctype="multipart/form-data"
         class="col-md-4 m-auto d-flex justify-content-center flex-column gap-0">
