@@ -30,14 +30,13 @@ class AgendaController extends Controller
     {
         $appointments = [];
         $agendaId = Request::getParam('id');
-        $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+        $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
         foreach ($agendas as $key => $value) {
             if ($value->id == $agendaId) {
                 $appointments = $this->agendaRepository->getAgendaAppointments($value);
             }
         }
-        Response::setHeader('Content-Type', 'application/json');
-        return json_encode($appointments);
+        return Response::json($appointments);
     }
 
     public function createAgenda()

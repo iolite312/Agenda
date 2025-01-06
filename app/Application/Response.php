@@ -28,6 +28,12 @@ class Response
         header("$name: $value");
     }
 
+    public static function json(array $data)
+    {
+        header('Content-Type: application/json');
+        return json_encode($data);
+    }
+
     public static function redirect(string $url): void
     {
         header("Location: $url");
