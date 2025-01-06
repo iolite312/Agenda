@@ -43,6 +43,23 @@ class AgendaRepository extends DatabaseRepository
         return $agendas;
     }
 
+    public function getAgendaUsersById(int $id)
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT UA.role, UA.accepted, U.first_name, U.last_name, U.email 
+            FROM `user_agenda` AS UA
+            JOIN users AS U on U.id = UA.user_id
+            WHERE UA.agenda_id = :id'
+        );
+        $stmt->execute([
+            ':id' => $id,
+        ]);
+
+        $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $result;
+    }
+
     public function getAgendaAppointments(Agenda $agenda)
     {
         $stmt = $this->pdo->prepare(
@@ -121,6 +138,80 @@ class AgendaRepository extends DatabaseRepository
             $this->pdo->rollBack();
 
             return $e->getMessage();
+        }
+    }
+
+    public function addUserToAgenda(string $email, AgendaRolesEnum $permission, int $agendaId)
+    {
+        try {
+            $this->pdo->beginTransaction();
+
+            $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt->execute([
+                ':email' => $email,
+            ]);
+
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                $this->pdo->rollBack();
+
+                return ResponseEnum::NOT_FOUND;
+            }
+
+            $userId = $user['id'];
+
+            $stmt = $this->pdo->prepare('INSERT INTO user_agenda (user_id, agenda_id, role, accepted) VALUES (:user_id, :agenda_id, :role, :accepted)');
+            $stmt->execute([
+                ':user_id' => $userId,
+                ':agenda_id' => $agendaId,
+                ':role' => $permission->value,
+                ':accepted' => InvitationsStatusEnum::PENDING->value,
+            ]);
+
+            $this->pdo->commit();
+
+            return ['first_name' => $user['first_name'], 'last_name' => $user['last_name'], 'email' => $user['email'], 'role' => $permission->value, 'accepted' => InvitationsStatusEnum::PENDING->value];
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+
+            return ResponseEnum::ERROR;
+        }
+    }
+
+    public function removeUserFromAgenda(string $email, int $agendaId)
+    {
+        try {
+            $this->pdo->beginTransaction();
+
+            $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt->execute([
+                ':email' => $email,
+            ]);
+
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                $this->pdo->rollBack();
+
+                return ResponseEnum::NOT_FOUND;
+            }
+
+            $userId = $user['id'];
+
+            $stmt = $this->pdo->prepare('DELETE FROM user_agenda WHERE user_id = :user_id AND agenda_id = :agenda_id');
+            $stmt->execute([
+                ':user_id' => $userId,
+                ':agenda_id' => $agendaId,
+            ]);
+
+            $this->pdo->commit();
+
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+
+            return ResponseEnum::ERROR;
         }
     }
 }

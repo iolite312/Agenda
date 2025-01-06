@@ -3,6 +3,7 @@
 use App\Application\Router;
 use App\Middleware\EnsureValidLogin;
 use App\Middleware\EnsureInvalidLogin;
+use App\Middleware\EnsureValidAgendaAccess;
 
 $router = Router::getInstance();
 
