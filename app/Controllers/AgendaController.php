@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Application\Request;
-use App\Application\Response;
-use App\Application\Session;
 use App\Enums\ResponseEnum;
+use App\Application\Request;
+use App\Application\Session;
+use App\Application\Response;
 use App\Repositories\AgendaRepository;
 
 class AgendaController extends Controller
@@ -21,10 +21,11 @@ class AgendaController extends Controller
     public function index()
     {
         $agendaId = Request::getParam('id');
-        $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+        $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
 
         return $this->pageLoader->setPage('agenda')->render(['page' => 'agenda', 'id' => $agendaId, 'agendas' => $agendas]);
     }
+
     public function getAgendaAppointments()
     {
         $appointments = [];
@@ -46,10 +47,12 @@ class AgendaController extends Controller
         $result = $this->agendaRepository->createAgenda($agendaName, $agendaDescription, Session::get('user'));
 
         if ($result === ResponseEnum::SUCCESS) {
-            $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+            $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
+
             return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas]);
         } else {
-            $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+            $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
+
             return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'errors' => [$result]]);
         }
     }
@@ -59,10 +62,12 @@ class AgendaController extends Controller
         $agendaId = Request::getParam('id');
         $result = $this->agendaRepository->deleteAgenda($agendaId);
         if ($result === ResponseEnum::SUCCESS) {
-            $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+            $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
+
             return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'success' => 'Agenda deleted successfully']);
         } else {
-            $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+            $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
+
             return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'errors' => [$result]]);
         }
     }

@@ -23,7 +23,7 @@ class ProfileController extends Controller
 
     public function index()
     {
-        $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+        $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
 
         return $this->pageLoader->setPage('profile')->render(['page' => 'profile', 'agendas' => $agendas]);
     }
@@ -75,7 +75,7 @@ class ProfileController extends Controller
 
     private function rerender(array $paramaters = [])
     {
-        $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+        $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
         $paramaters['agendas'] = $agendas;
 
         return $this->pageLoader->setPage('profile')->render($paramaters);

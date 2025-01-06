@@ -19,7 +19,7 @@ class AgendaRepository extends DatabaseRepository
         $this->pdo = $this->getConnection();
     }
 
-    public function getAgendaById(User $user): array
+    public function getAgendaByUserId(User $user): array
     {
         $stmt = $this->pdo->prepare(
             'SELECT A.*, UA.*

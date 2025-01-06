@@ -17,7 +17,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $agendas = $this->agendaRepository->getAgendaById(Session::get('user'));
+        $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
 
         return $this->pageLoader->setPage('home')->render(['page' => 'home', 'agendas' => $agendas]);
     }
