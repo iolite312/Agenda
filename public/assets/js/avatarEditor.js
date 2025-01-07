@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isDragging = false;
   let startX, startY;
   let lastPreviewSrc = preview.src; // Save the current preview source
+  let isNewUpload = false; // Tracks if a new image was uploaded
 
   const drawImage = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -96,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = (e) => {
         lastPreviewSrc = preview.src; // Save the current preview before changing
         image.src = e.target.result;
+        isNewUpload = true; // Mark this as a new upload
         removeButton.removeAttribute("disabled"); // Enable the remove button
       };
       reader.readAsDataURL(file);
@@ -113,7 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   avatarContainer.addEventListener("click", () => {
-    if (!image.src) {
+    if (!image.src || isNewUpload) {
+      // Allow file upload only if no image or this is a new upload
       upload.click();
     } else {
       // Open the modal for editing
@@ -131,6 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
       preview.src = lastPreviewSrc; // Restore the previous image
       hiddenInput.value = lastPreviewSrc; // Update the hidden input
       upload.value = ""; // Clear the file input
+      image = new Image(); // Reset the image object
+      isNewUpload = false; // Reset new upload flag
       ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
     }
   });
@@ -144,6 +149,8 @@ document.addEventListener("DOMContentLoaded", () => {
       modalInstance = new bootstrap.Modal(modal);
     }
     modalInstance.hide();
+
+    isNewUpload = false; // Mark upload as handled
   });
 
   slider.addEventListener("input", (e) => {
