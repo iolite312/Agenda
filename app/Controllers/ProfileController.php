@@ -34,7 +34,6 @@ class ProfileController extends Controller
         $avatarData = Request::getPostField('avatarData');
         $firstName = Request::getPostField('firstName');
         $lastName = Request::getPostField('lastName');
-        $email = Request::getPostField('email');
         $password = Request::getPostField('password');
         $confirmPassword = Request::getPostField('confirmPassword');
 
@@ -56,7 +55,6 @@ class ProfileController extends Controller
             'id' => $user->id,
             'firstName' => $firstName,
             'lastName' => $lastName,
-            'email' => $email,
             'profile_picture' => $user->profilePicture,
             'password' => $password,
         ]);
@@ -64,7 +62,6 @@ class ProfileController extends Controller
         if ($result === ResponseEnum::SUCCESS) {
             $user->firstName = $firstName;
             $user->lastName = $lastName;
-            $user->email = $email;
             Session::set('user', $user);
         } else {
             return $this->rerender(['error' => 'Something went wrong', 'page' => 'profile', 'fields' => $_POST]);
