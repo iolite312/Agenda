@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let offsetY = 0;
   let isDragging = false;
   let startX, startY;
-  let lastPreviewSrc = preview.src;
+  let lastPreviewSrc = preview.src; // Save the current preview source
 
   const drawImage = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -51,68 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.restore();
   };
 
-  upload.addEventListener("change", (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        image.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  image.onload = () => {
-    scale = 1;
-    offsetX = canvas.width / 2 - image.width / 2;
-    offsetY = canvas.height / 2 - image.height / 2;
-    drawImage();
-  };
-
-  // Open modal for editing
-  removeButton.addEventListener("click", () => {
-    if (image.src) {
-      removeButton.setAttribute("disabled", true);
-      image = new Image();
-      hiddenInput.value = "";
-      upload.value = "";
-      preview.src = lastPreviewSrc;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-  });
-
-  avatarContainer.addEventListener("click", () => {
-    if (!image.src) {
-      upload.click();
-    } else {
-      // Use Bootstrap's Modal API to hide it
-      let modalInstance = bootstrap.Modal.getInstance(modal); // Get the modal instance
-      if (!modalInstance) {
-        modalInstance = new bootstrap.Modal(modal); // Create a new instance if needed
-      }
-      modalInstance.show(); // Dismiss the modal
-    }
-  });
-
-  upload.addEventListener("change", function () {
-    const file = this.files[0]; // Get the first selected file
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = function (event) {
-        preview.src = event.target.result; // Set the image source to the file data
-        hiddenInput.value = preview.src;
-      };
-
-      reader.readAsDataURL(file); // Read the file as a data URL
-    }
-    removeButton.removeAttribute("disabled");
-  });
-
-  // Save cropped avatar to preview
-  saveButton.addEventListener("click", () => {
+  const saveCroppedImage = () => {
     const outputCanvas = document.createElement("canvas");
-    outputCanvas.width = 512;
+    outputCanvas.width = 512; // Final cropped image size
     outputCanvas.height = 512;
     const outputCtx = outputCanvas.getContext("2d");
 
@@ -142,19 +83,81 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     outputCtx.restore();
 
-    preview.src = outputCanvas.toDataURL();
+    // Update the preview and hidden input with the cropped image
+    const croppedDataUrl = outputCanvas.toDataURL();
+    preview.src = croppedDataUrl;
+    hiddenInput.value = croppedDataUrl;
+  };
 
-    hiddenInput.value = preview.src;
-
-    // Use Bootstrap's Modal API to hide it
-    let modalInstance = bootstrap.Modal.getInstance(modal); // Get the modal instance
-    if (!modalInstance) {
-      modalInstance = new bootstrap.Modal(modal); // Create a new instance if needed
+  upload.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        lastPreviewSrc = preview.src; // Save the current preview before changing
+        image.src = e.target.result;
+        removeButton.removeAttribute("disabled"); // Enable the remove button
+      };
+      reader.readAsDataURL(file);
     }
-    modalInstance.hide(); // Dismiss the modal
   });
 
-  // Drag and drop functionality
+  image.onload = () => {
+    scale = 1;
+    offsetX = canvas.width / 2 - image.width / 2;
+    offsetY = canvas.height / 2 - image.height / 2;
+    drawImage();
+
+    // Automatically save the cropped image
+    saveCroppedImage();
+  };
+
+  avatarContainer.addEventListener("click", () => {
+    if (!image.src) {
+      upload.click();
+    } else {
+      // Open the modal for editing
+      let modalInstance = bootstrap.Modal.getInstance(modal);
+      if (!modalInstance) {
+        modalInstance = new bootstrap.Modal(modal);
+      }
+      modalInstance.show();
+    }
+  });
+
+  removeButton.addEventListener("click", () => {
+    if (image.src) {
+      removeButton.setAttribute("disabled", true); // Disable the button after removal
+      preview.src = lastPreviewSrc; // Restore the previous image
+      hiddenInput.value = lastPreviewSrc; // Update the hidden input
+      upload.value = ""; // Clear the file input
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    }
+  });
+
+  saveButton.addEventListener("click", () => {
+    saveCroppedImage();
+
+    // Close the modal
+    let modalInstance = bootstrap.Modal.getInstance(modal);
+    if (!modalInstance) {
+      modalInstance = new bootstrap.Modal(modal);
+    }
+    modalInstance.hide();
+  });
+
+  slider.addEventListener("input", (e) => {
+    const newScale = parseFloat(e.target.value);
+    const scaleChange = newScale / scale;
+
+    // Adjust offsets to keep zoom focused on canvas center
+    offsetX = canvas.width / 2 - (canvas.width / 2 - offsetX) * scaleChange;
+    offsetY = canvas.height / 2 - (canvas.height / 2 - offsetY) * scaleChange;
+
+    scale = newScale;
+    drawImage();
+  });
+
   canvas.addEventListener("mousedown", (e) => {
     isDragging = true;
     startX = e.offsetX;
@@ -166,10 +169,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isDragging) {
       const dx = e.offsetX - startX;
       const dy = e.offsetY - startY;
+
       offsetX += dx;
       offsetY += dy;
+
       startX = e.offsetX;
       startY = e.offsetY;
+
       drawImage();
     }
   });
@@ -179,28 +185,8 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.style.cursor = "grab";
   });
 
-  // Slider for zoom
-  slider.addEventListener("input", (e) => {
-    const newScale = parseFloat(e.target.value);
-    const scaleChange = newScale / scale;
-
-    // Adjust offsets to keep the zoom focused on the center of the canvas
-    offsetX = canvas.width / 2 - (canvas.width / 2 - offsetX) * scaleChange;
-    offsetY = canvas.height / 2 - (canvas.height / 2 - offsetY) * scaleChange;
-
-    scale = newScale;
-    drawImage();
+  canvas.addEventListener("mouseleave", () => {
+    isDragging = false;
+    canvas.style.cursor = "grab";
   });
-
-  // Convert dataURL to Blob for upload
-  const dataURLToBlob = (dataURL) => {
-    const [header, base64] = dataURL.split(",");
-    const mime = header.match(/:(.*?);/)[1];
-    const binary = atob(base64);
-    const array = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      array[i] = binary.charCodeAt(i);
-    }
-    return new Blob([array], { type: mime });
-  };
 });
