@@ -4,8 +4,8 @@ use App\Application\Router;
 use App\Enums\AgendaRolesEnum;
 use App\Middleware\EnsureValidLogin;
 use App\Middleware\EnsureInvalidLogin;
-use App\Middleware\EnsureValidAgendaAccess;
 use App\Middleware\EnsureValidRoleAccess;
+use App\Middleware\EnsureValidAgendaAccess;
 
 $router = Router::getInstance();
 

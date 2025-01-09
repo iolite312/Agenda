@@ -22,6 +22,7 @@ class User
         $this->email = $email;
         $this->profilePicture = $profilePicture;
     }
+
     public static function fromDatabase(array $user): self
     {
         return new self(

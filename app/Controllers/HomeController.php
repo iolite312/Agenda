@@ -25,7 +25,7 @@ class HomeController extends Controller
             if (!$value->personal_agenda) {
                 $accessLevel = $this->agendaRepository->getAgendaUsersById($value->id);
 
-                $accessLevel = array_filter($accessLevel, fn($user) => $user['user_id'] === Session::get('user')->id);
+                $accessLevel = array_filter($accessLevel, fn ($user) => $user['user_id'] === Session::get('user')->id);
 
                 foreach ($accessLevel as $key => $value) {
                     $role = [$value['agenda_id'] => AgendaRolesEnum::from($value['role'])];

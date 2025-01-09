@@ -44,17 +44,17 @@
                             </a>
                         </li>';
                 }
-                ?>
+    ?>
                 <hr>
                 <?php
-                foreach ($agendas as $agenda) {
-                    if ($agenda->personal_agenda) {
-                        continue;
-                    }
-                    $roles = App\Application\Session::get('user_roles');
-                    $userRole = array_filter($roles, fn($role) => array_key_exists($agenda->id, $role));
-                    $role = array_values($userRole)[0][$agenda->id];
-                    echo '<div class="' . ($role == App\Enums\AgendaRolesEnum::ADMIN ? 'btn-group ' : '') . 'w-100">
+    foreach ($agendas as $agenda) {
+        if ($agenda->personal_agenda) {
+            continue;
+        }
+        $roles = App\Application\Session::get('user_roles');
+        $userRole = array_filter($roles, fn ($role) => array_key_exists($agenda->id, $role));
+        $role = array_values($userRole)[0][$agenda->id];
+        echo '<div class="' . ($role == App\Enums\AgendaRolesEnum::ADMIN ? 'btn-group ' : '') . 'w-100">
                             <a href="/agenda/' . $agenda->id . '" class="nav-link ' . (($page == 'agenda' || $page == 'edit') && $id == $agenda->id ? 'active' : '') . ' link-light flex-grow-1' . ($role == App\Enums\AgendaRolesEnum::ADMIN ? ' rounded-end-0' : '') . '" title="' . $agenda->name . ' - ' . $agenda->description . '">
                                     ' . $agenda->name . '
                                 </a>
@@ -71,8 +71,8 @@
                                 <li><button class="dropdown-item" onclick="deleteAgenda(' . $agenda->id . ')" href="#" data-bs-toggle="modal" data-bs-target="#deleteAgendaModal">Delete agenda</button></li>
                             </ul>
                         </div>';
-                }
-                ?>
+    }
+    ?>
             </ul>
             <hr>
             <ul class="nav nav-pills flex-column">
