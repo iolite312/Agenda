@@ -46,7 +46,7 @@ class AgendaRepository extends DatabaseRepository
     public function getAgendaUsersById(int $id)
     {
         $stmt = $this->pdo->prepare(
-            'SELECT UA.role, UA.accepted, U.first_name, U.last_name, U.email 
+            'SELECT UA.agenda_id, UA.user_id, UA.role, UA.accepted, U.first_name, U.last_name, U.email 
             FROM `user_agenda` AS UA
             JOIN users AS U on U.id = UA.user_id
             WHERE UA.agenda_id = :id'
