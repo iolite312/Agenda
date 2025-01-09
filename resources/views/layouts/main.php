@@ -44,23 +44,26 @@
                             </a>
                         </li>';
                 }
-    ?>
+                ?>
                 <hr>
                 <?php
-    foreach ($agendas as $agenda) {
-        if ($agenda->personal_agenda) {
-            continue;
-        }
-        echo '<div class="btn-group w-100">
-                            <a href="/agenda/' . $agenda->id . '" class="nav-link ' . (($page == 'agenda' || $page == 'edit') && $id == $agenda->id ? 'active' : '') . ' link-light flex-grow-1 rounded-end-0" title="' . $agenda->name . ' - ' . $agenda->description . '">
+                foreach ($agendas as $agenda) {
+                    if ($agenda->personal_agenda) {
+                        continue;
+                    }
+                    $roles = App\Application\Session::get('user_roles');
+                    $userRole = array_filter($roles, fn($role) => array_key_exists($agenda->id, $role));
+                    $role = array_values($userRole)[0][$agenda->id];
+                    echo '<div class="' . ($role == App\Enums\AgendaRolesEnum::ADMIN ? 'btn-group ' : '') . 'w-100">
+                            <a href="/agenda/' . $agenda->id . '" class="nav-link ' . (($page == 'agenda' || $page == 'edit') && $id == $agenda->id ? 'active' : '') . ' link-light flex-grow-1' . ($role == App\Enums\AgendaRolesEnum::ADMIN ? ' rounded-end-0' : '') . '" title="' . $agenda->name . ' - ' . $agenda->description . '">
                                     ' . $agenda->name . '
                                 </a>
                             <button type="button"
-                                class="btn ' . (($page == 'agenda' || $page == 'edit') && $id == $agenda->id ? 'btn-primary' : '') . ' dropdown-toggle dropdown-toggle-split resize-button"
+                                class="btn ' . (($page == 'agenda' || $page == 'edit') && $id == $agenda->id ? 'btn-primary' : '') . ' dropdown-toggle dropdown-toggle-split resize-button' . ($role == App\Enums\AgendaRolesEnum::USER ? ' d-none' : '') . '"
                                 data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
                                 <span class="visually-hidden">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu ' . ($role == App\Enums\AgendaRolesEnum::USER ? 'd-none' : '') . '">
                                 <li><a class="dropdown-item" href="/agenda/' . $agenda->id . '/edit">Edit agenda</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -68,8 +71,8 @@
                                 <li><button class="dropdown-item" onclick="deleteAgenda(' . $agenda->id . ')" href="#" data-bs-toggle="modal" data-bs-target="#deleteAgendaModal">Delete agenda</button></li>
                             </ul>
                         </div>';
-    }
-    ?>
+                }
+                ?>
             </ul>
             <hr>
             <ul class="nav nav-pills flex-column">
