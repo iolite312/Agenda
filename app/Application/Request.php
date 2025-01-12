@@ -46,4 +46,9 @@ class Request
     {
         return self::$params[$key] ?? $default;
     }
+
+    public static function getUrlParam(string $key, $default = null)
+    {
+        return $_GET[$key] ?? $default;
+    }
 }

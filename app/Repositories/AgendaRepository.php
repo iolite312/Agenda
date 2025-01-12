@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Application\Request;
 use App\Models\User;
 use App\Models\Agenda;
 use App\Enums\ResponseEnum;
@@ -62,11 +63,21 @@ class AgendaRepository extends DatabaseRepository
 
     public function getAgendaAppointments(Agenda $agenda)
     {
+        $date = null;
+        $week = Request::getUrlParam('week');
+        $year = Request::getUrlParam('year');
+        if (isset($week) && isset($year) && $week != null && $year != null) {
+            $date = new \DateTime();
+            $date->setISODate($year, $week);
+        } else {
+            $date = new \DateTime()->modify('monday this week');
+        }
         $stmt = $this->pdo->prepare(
-            'SELECT * FROM `agenda_items` WHERE agenda_id = :id'
+            'SELECT * FROM `agenda_items` WHERE agenda_id = :id AND start_time > :date'
         );
         $stmt->execute([
             ':id' => $agenda->id,
+            ':date' => $date->format('Y-m-d')
         ]);
 
         $rawAppointments = $stmt->fetchAll(\PDO::FETCH_ASSOC);

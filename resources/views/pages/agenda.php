@@ -7,7 +7,7 @@
             method: 'GET'
         };
 
-        fetch('http://192.168.178.182/api/agenda/<?php echo App\Application\Request::getParam('id'); ?>/appointments', options)
+        fetch('http://192.168.178.182/api/agenda/<?php echo App\Application\Request::getParam('id'); ?>/appointments?week=<?php echo App\Application\Request::getUrlParam('week'); ?>&year=<?php echo App\Application\Request::getUrlParam('year'); ?>', options)
             .then(response => response.json())
             .then(response => {
                 // Function to parse date strings
