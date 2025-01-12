@@ -23,6 +23,7 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
     $router->post('/agenda/create', [App\Controllers\AgendaController::class, 'createAgenda']);
     $router->middleware(EnsureValidAgendaAccess::class, function () use ($router) {
         $router->get('/agenda/{id}', [App\Controllers\AgendaController::class, 'index']);
+        $router->get('/api/agenda/{id}/appointments', [App\Controllers\AgendaController::class, 'getAgendaAppointments']);
         $router->middleware(EnsureValidRoleAccess::class, function () use ($router) {
             $router->get('/agenda/{id}/edit', [App\Controllers\EditAgendaController::class, 'index']);
             $router->get('/agenda/{id}/edit/users', [App\Controllers\EditAgendaController::class, 'getAgendaUsers']);
@@ -30,6 +31,5 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
             $router->post('/agenda/{id}/edit/removeuser', [App\Controllers\EditAgendaController::class, 'removeUser']);
             $router->post('/agenda/{id}/delete', [App\Controllers\AgendaController::class, 'deleteAgenda']);
         }, [[AgendaRolesEnum::ADMIN]]);
-        $router->get('/api/agenda/{id}/appointments', [App\Controllers\AgendaController::class, 'getAgendaAppointments']);
     });
 });
