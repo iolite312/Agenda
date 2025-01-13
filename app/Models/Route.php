@@ -9,7 +9,7 @@ class Route
     public $uri;
     public $method;
     public $callback;
-    public $middlewares;
+    public $middlewares = [];
     public $parameters = [];
 
     public function __construct($uri, $method, $callback, ?MiddlewareInterface $middlewares = null)

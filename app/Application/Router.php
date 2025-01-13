@@ -52,7 +52,7 @@ class Router
         $method = $this->request->getMethod();
         $route = $this->routeExists($uri, $method);
 
-        if (is_null($route) || $route->activateMiddleware()) {
+        if (is_null($route) || !$route->activateMiddleware()) {
             $this->response->setStatusCode(404);
             $this->response->setContent('404 Not Found');
         } else {

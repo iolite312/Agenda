@@ -21,10 +21,10 @@ class EnsureValidAgendaAccess implements MiddlewareInterface
 
         foreach ($agendas as $key => $value) {
             if ($value->id == Request::getParam('id')) {
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
