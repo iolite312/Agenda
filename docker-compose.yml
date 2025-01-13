@@ -31,6 +31,9 @@ services:
 
     phpmyadmin:
         image: phpmyadmin:latest
+        volumes:
+            - ./darkwolf:/var/www/html/themes/darkwolf
+            - ./blueberry:/var/www/html/themes/blueberry
         ports:
             - 8080:80
         environment:
