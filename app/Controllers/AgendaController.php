@@ -26,20 +26,6 @@ class AgendaController extends Controller
         return $this->pageLoader->setPage('agenda')->render(['page' => 'agenda', 'id' => $agendaId, 'agendas' => $agendas]);
     }
 
-    public function getAgendaAppointments()
-    {
-        $appointments = [];
-        $agendaId = Request::getParam('id');
-        $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
-        foreach ($agendas as $key => $value) {
-            if ($value->id == $agendaId) {
-                $appointments = $this->agendaRepository->getAgendaAppointments($value);
-            }
-        }
-
-        return Response::json($appointments);
-    }
-
     public function createAgenda()
     {
         $agendaName = Request::getPostField('agendaName');
