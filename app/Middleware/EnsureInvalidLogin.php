@@ -12,9 +12,9 @@ class EnsureInvalidLogin implements MiddlewareInterface
         if (Session::get('user')) {
             Response::redirect('/');
 
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }
