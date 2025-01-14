@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\AgendaSocket;
+use App\Socket\Models\AgendaSocket;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;

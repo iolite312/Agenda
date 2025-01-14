@@ -23,4 +23,4 @@ RUN composer install
 EXPOSE 8080
 
 # Command to start Ratchet WebSocket server (adjust as needed)
-CMD ["php", "app/socket/index.php"]
+CMD ["php", "app/Socket/index.php"]
