@@ -61,11 +61,9 @@ class AgendaRepository extends DatabaseRepository
         return $result;
     }
 
-    public function getAgendaAppointments(Agenda $agenda)
+    public function getAgendaAppointments(Agenda $agenda, int $week = null, int $year = null)
     {
         $date = null;
-        $week = Request::getUrlParam('week');
-        $year = Request::getUrlParam('year');
         if (isset($week) && isset($year) && $week != null && $year != null) {
             $date = new \DateTime();
             $date->setISODate($year, $week);
