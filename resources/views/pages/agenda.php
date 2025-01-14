@@ -2,12 +2,13 @@
 <div id="calendar">
 </div>
 <script>
+    const searchParams = new URLSearchParams(window.location.search);
     const ws = new WebSocket('ws://192.168.178.182:8082');
 
     // Listen for connection open
     ws.onopen = () => {
         console.log('Connected to WebSocket server.');
-        ws.send(JSON.stringify({ action: 'appointments', id: <?php echo App\Application\Request::getParam('id'); ?>, week: <?php echo App\Application\Request::getUrlParam('week'); ?>, year: <?php echo App\Application\Request::getUrlParam('year'); ?> }));
+        ws.send(JSON.stringify({ action: 'appointments', id: <?php echo App\Application\Request::getParam('id'); ?>, week: searchParams.get('week'), year: searchParams.get('year') }));
     };
 
     ws.onmessage = (event) => {
