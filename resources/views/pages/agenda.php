@@ -8,11 +8,23 @@
     // Listen for connection open
     ws.onopen = () => {
         console.log('Connected to WebSocket server.');
+        ws.send(JSON.stringify({ action: 'join', room: <?php echo App\Application\Request::getParam('id'); ?> }));
         ws.send(JSON.stringify({ action: 'appointments', id: <?php echo App\Application\Request::getParam('id'); ?>, week: searchParams.get('week'), year: searchParams.get('year') }));
     };
 
     ws.onmessage = (event) => {
-        getAppointments(event.data);
+        const response = JSON.parse(event.data);
+        if (response.trigger === 'appointments') {
+            getAppointments(response.appointments);
+            return;
+        }
+
+        if (response.trigger === 'update') {
+            ws.send(JSON.stringify({ action: 'appointments', id: <?php echo App\Application\Request::getParam('id'); ?>, week: searchParams.get('week'), year: searchParams.get('year') }));
+            getAppointments(response.appointments);
+            return;
+        }
+        console.log(response);
     };
 
     // Listen for errors
@@ -25,7 +37,6 @@
         console.log('Disconnected from WebSocket server.');
     };
     function getAppointments(data) {
-        const response = JSON.parse(data);
         // Function to parse date strings
         function parseDate(dateString) {
             return new Date(dateString.replace(".000000", ""));
@@ -37,7 +48,7 @@
         }
 
         // Sort events by start_time
-        const sortedEvents = response.sort((a, b) => {
+        const sortedEvents = data.sort((a, b) => {
             return parseDate(a.start_time.date) - parseDate(b.start_time.date);
         });
 
@@ -92,7 +103,7 @@
             console.error("No element with id 'calendar' found.");
             return;
         }
-
+        calendarDiv.innerHTML = '';
         Object.keys(eventsByDay).forEach((date) => {
             const dateDiv = document.createElement('div');
 
