@@ -4,7 +4,7 @@ namespace App\Models;
 
 class Appointments
 {
-    public int $id;
+    public ?int $id;
     public \DateTime $start_time;
     public \DateTime $end_time;
     public string $name;
@@ -13,7 +13,7 @@ class Appointments
     public int $agenda_id;
 
     public function __construct(
-        int $id,
+        ?int $id,
         \DateTime $start_time,
         \DateTime $end_time,
         string $name,

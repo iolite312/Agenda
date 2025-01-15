@@ -2,10 +2,12 @@
 
 namespace App\Socket\Models;
 
+use App\Enums\ResponseEnum;
 use App\Application\Session;
-use App\Repositories\AgendaRepository;
-use App\Socket\Helpers\SessionHelper;
+use App\Models\Appointments;
 use Ratchet\ConnectionInterface;
+use App\Socket\Helpers\SessionHelper;
+use App\Repositories\AgendaRepository;
 use Ratchet\MessageComponentInterface;
 
 class AgendaSocket implements MessageComponentInterface
@@ -15,7 +17,7 @@ class AgendaSocket implements MessageComponentInterface
 
     public function __construct()
     {
-        $this->clients = new \SplObjectStorage;
+        $this->clients = new \SplObjectStorage();
         $this->rooms = [];
     }
 
@@ -47,14 +49,14 @@ class AgendaSocket implements MessageComponentInterface
                     $this->rooms[$room] = [];
                 }
                 $this->rooms[$room][$from->resourceId] = $from;
-                $from->send("Joined room: $room");
+                $from->send(json_encode("Joined room: $room"));
                 break;
 
             case 'leave':
                 $room = $data['room'];
                 if (isset($this->rooms[$room][$from->resourceId])) {
                     unset($this->rooms[$room][$from->resourceId]);
-                    $from->send("Left room: $room");
+                    $from->send(json_encode("Left room: $room"));
                 }
                 break;
 
@@ -64,15 +66,7 @@ class AgendaSocket implements MessageComponentInterface
                 if (isset($this->rooms[$room])) {
                     foreach ($this->rooms[$room] as $client) {
                         $client->send("Room $room: $message");
-                        // if ($from !== $client) { // Don't send the message to the sender
-                        // }
                     }
-                }
-                break;
-            case 'dump':
-                foreach ($this->clients as $client) {
-                    $clientSession = $this->clients->offsetGet($client);
-                    $client->send("Client {$client->resourceId} session: " . json_encode($clientSession));
                 }
                 break;
             case 'appointments':
@@ -89,7 +83,29 @@ class AgendaSocket implements MessageComponentInterface
                         $appointments = $agendaRepository->getAgendaAppointments($value, $week, $year);
                     }
                 }
-                $from->send(json_encode($appointments));
+                $from->send(json_encode(['trigger' => 'appointments', 'appointments' => $appointments]));
+                break;
+            case 'make-appointment':
+                $agendaRepository = new AgendaRepository();
+                $startTime = new \DateTime($data['start_time']);
+                $endTime = new \DateTime($data['end_time']);
+
+                if ($endTime <= $startTime) {
+                    $from->send(json_encode(['status' => ResponseEnum::ERROR->value, 'trigger' => 'make-appointment', 'message' => 'End time cannot be before start time']));
+                    break;
+                }
+
+                $appointment = new Appointments(null, $startTime, $endTime, $data['name'], $data['description'], $data['color'], $data['agenda_id']);
+                $result = $agendaRepository->createAppointment($appointment);
+                $room = $data['room'];
+
+                if (isset($this->rooms[$room]) && $result === ResponseEnum::SUCCESS) {
+                    foreach ($this->rooms[$room] as $client) {
+                        $client->send(json_encode(['trigger' => 'update']));
+                    }
+                }
+
+                $from->send(json_encode(['status' => $result->value, 'trigger' => 'make-appointment']));
                 break;
         }
     }

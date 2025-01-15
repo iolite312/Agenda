@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-enum ResponseEnum
+enum ResponseEnum: string
 {
-    case UNKOWN;
-    case NOT_FOUND;
-    case ERROR;
-    case ALREADY_EXISTS;
-    case SUCCESS;
+    case UNKOWN = 'unkown';
+    case NOT_FOUND = 'not_found';
+    case ERROR = 'error';
+    case ALREADY_EXISTS = 'already_exists';
+    case SUCCESS = 'success';
 }

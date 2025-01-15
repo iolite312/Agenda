@@ -90,6 +90,25 @@ class AgendaRepository extends DatabaseRepository
         return $appointments;
     }
 
+    public function createAppointment(Appointments $appointment)
+    {
+        try {
+            $stmt = $this->pdo->prepare('INSERT INTO agenda_items (start_time, end_time, name, description, color, agenda_id) VALUES (:start_time, :end_time, :name, :description, :color, :agenda_id)');
+            $stmt->execute([
+                ':start_time' => $appointment->start_time->format('Y-m-d H:i:s'),
+                ':end_time' => $appointment->end_time->format('Y-m-d H:i:s'),
+                ':name' => $appointment->name,
+                ':description' => $appointment->description,
+                ':color' => $appointment->color,
+                ':agenda_id' => $appointment->agenda_id,
+            ]);
+
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            return ResponseEnum::ERROR;
+        }
+    }
+
     public function createAgenda(string $name, string $description, User $user)
     {
         try {
