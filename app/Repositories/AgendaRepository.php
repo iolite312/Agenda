@@ -70,13 +70,32 @@ class AgendaRepository extends DatabaseRepository
         } else {
             $date = new \DateTime()->modify('monday this week');
         }
-        $stmt = $this->pdo->prepare(
-            'SELECT * FROM `agenda_items` WHERE agenda_id = :id AND start_time > :date'
-        );
-        $stmt->execute([
-            ':id' => $agenda->id,
-            ':date' => $date->format('Y-m-d')
-        ]);
+
+        $startDate = $date->format('Y-m-d');
+        $endDate = $date->modify('+2 weeks')->format('Y-m-d');
+
+        $query = '
+        SELECT * FROM `agenda_items` 
+            WHERE agenda_id = :id 
+            AND (
+                (start_time >= :start_date1 AND start_time <= :end_date1) 
+                OR (end_time >= :start_date2 AND end_time <= :end_date2) 
+                OR (start_time <= :start_date3 AND end_time >= :end_date3)
+            )
+        ';
+
+        $stmt = $this->pdo->prepare($query);
+
+        // I have to it this way because PDO driver refuses to replace all the instances of the same paramater except for the first one
+        $stmt->bindValue(':id', $agenda->id, \PDO::PARAM_INT);
+        $stmt->bindValue(':start_date1', $startDate, \PDO::PARAM_STR);
+        $stmt->bindValue(':end_date1', $endDate, \PDO::PARAM_STR);
+        $stmt->bindValue(':start_date2', $startDate, \PDO::PARAM_STR);
+        $stmt->bindValue(':end_date2', $endDate, \PDO::PARAM_STR);
+        $stmt->bindValue(':start_date3', $startDate, \PDO::PARAM_STR);
+        $stmt->bindValue(':end_date3', $endDate, \PDO::PARAM_STR);
+
+        $stmt->execute();
 
         $rawAppointments = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
