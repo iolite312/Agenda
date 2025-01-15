@@ -1,9 +1,9 @@
 <?php
 
-use App\Socket\Models\AgendaSocket;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\WebSocket\WsServer;
+use App\Socket\Models\AgendaSocket;
 
 require '/app/vendor/autoload.php';
 
