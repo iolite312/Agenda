@@ -64,14 +64,13 @@
                 startDate.toISOString().slice(0, 10) !== endDate.toISOString().slice(0, 10);
 
             if (isMultiDay) {
-                const daysSpanned =
-                    Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+                const daysSpanned = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
 
                 for (let i = 0; i < daysSpanned; i++) {
                     const currentDay = new Date(startDate);
                     currentDay.setDate(startDate.getDate() + i);
 
-                    const formattedDate = currentDay.toISOString().slice(0, 10);
+                    const formattedDate = currentDay;
                     if (!eventsByDay[formattedDate]) {
                         eventsByDay[formattedDate] = [];
                     }
