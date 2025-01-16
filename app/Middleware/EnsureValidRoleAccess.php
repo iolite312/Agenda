@@ -22,7 +22,7 @@ class EnsureValidRoleAccess implements MiddlewareInterface
         $id = Request::getParam('id');
         $roles = Session::get('user_roles');
 
-        $userRole = array_filter($roles, fn($role) => array_key_exists($id, $role));
+        $userRole = array_filter($roles, fn ($role) => array_key_exists($id, $role));
 
         // This is here to reset the index
         $userRole = array_values($userRole);
