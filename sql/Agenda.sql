@@ -87,7 +87,7 @@ CREATE TABLE `users` (
 CREATE TABLE `user_agenda` (
   `user_id` int(11) NOT NULL,
   `agenda_id` int(11) NOT NULL,
-  `personal_agenda` tinyint(4) NOT NULL DEFAULT 1,
+  `personal_agenda` tinyint(4) NOT NULL DEFAULT 0,
   `role` varchar(10) NOT NULL,
   `accepted` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
