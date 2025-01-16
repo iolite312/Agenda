@@ -7,7 +7,7 @@
             <div>
                 <div class="form-floating my-3">
                     <input type="text" class="form-control" id="agendaNameInput" placeholder="agenda" name="agendaName"
-                        value=" <?php foreach ($agendas as $agenda) {
+                        value="<?php foreach ($agendas as $agenda) {
                             if ($agenda->id == $id) {
                                 echo trim($agenda->name);
                             }
@@ -16,7 +16,11 @@
                 </div>
                 <div class="form-floating my-3">
                     <input type="text" class="form-control" id="agendaDescriptionInput" placeholder="Doe"
-                        name="agendaDescription">
+                        name="agendaDescription" value="<?php foreach ($agendas as $agenda) {
+                            if ($agenda->id == $id) {
+                                echo trim($agenda->description);
+                            }
+                        } ?>">
                     <label for="agendaDescriptionInput">Agenda description</label>
                 </div>
                 <button class="btn btn-primary w-100 py-2" type="submit">Save Changes</button>

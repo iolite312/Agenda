@@ -34,6 +34,24 @@ class EditAgendaController extends Controller
         return Response::json(['status' => 'success', 'data' => $result]);
     }
 
+    public function changeAgendaName()
+    {
+        $agendaId = Request::getParam('id');
+        $agendaName = Request::getPostField('agendaName');
+        $agendaDescription = Request::getPostField('agendaDescription');
+        $result = $this->agendaRepository->changeAgendaName($agendaId, $agendaName, $agendaDescription);
+
+        if ($result === ResponseEnum::SUCCESS) {
+            $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
+
+            Response::redirect("/agenda/$agendaId/edit");
+        } else {
+            $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
+
+            return $this->pageLoader->setPage('home')->render(['page' => 'Home', 'agendas' => $agendas, 'errors' => [$result]]);
+        }
+    }
+
     public function addUser()
     {
         $json = file_get_contents('php://input');

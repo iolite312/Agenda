@@ -159,6 +159,22 @@ class AgendaRepository extends DatabaseRepository
         }
     }
 
+    public function changeAgendaName(int $id, string $name, string $description)
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE agendas SET name = :name, description = :description WHERE id = :id');
+            $stmt->execute([
+                ':name' => $name,
+                ':description' => $description,
+                ':id' => $id,
+            ]);
+
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            return ResponseEnum::ERROR;
+        }
+    }
+
     public function deleteAgenda($id)
     {
         try {
