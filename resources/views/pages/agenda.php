@@ -85,12 +85,13 @@
     const editButton = document.getElementById('editButton');
     const deleteButton = document.getElementById('deleteButton');
     const addButton = document.getElementById('addButton');
-    const ws = new WebSocket('ws://192.168.178.182:8082');
+    const ws = new WebSocket('ws://<?php echo $_SERVER['HTTP_HOST']; ?>:8082');
 
     // Listen for connection open
     ws.onopen = () => {
         console.log('Connected to WebSocket server.');
         ws.send(JSON.stringify({ action: 'join', room: <?php echo App\Application\Request::getParam('id'); ?> }));
+        ws.send(JSON.stringify({ action: 'appointments', id: <?php echo App\Application\Request::getParam('id'); ?>, week: searchParams.get('week'), year: searchParams.get('year') }));
     };
 
     ws.onmessage = (event) => {
