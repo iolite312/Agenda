@@ -79,7 +79,6 @@
     ws.onopen = () => {
         console.log('Connected to WebSocket server.');
         ws.send(JSON.stringify({ action: 'join', room: <?php echo App\Application\Request::getParam('id'); ?> }));
-        // ws.send(JSON.stringify({ action: 'appointments', id: <?php echo App\Application\Request::getParam('id'); ?>, week: searchParams.get('week'), year: searchParams.get('year') }));
     };
 
     ws.onmessage = (event) => {
