@@ -1,4 +1,4 @@
-<div>
+<div class="mt-3">
     <h1>Homepage</h1>
     <?php
     use app\Application\Session;
