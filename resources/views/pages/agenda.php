@@ -61,8 +61,17 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="addAppointment()">Add appointment</button>
+                    <button id="deleteButton" type="button" class="btn btn-danger" style="display: none;"
+                        data-bs-dismiss="modal" onclick="removeAppointment()">Delete
+                        appointment</button>
+                    <div class="d-flex gap-1">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="addButton" type="button" class="btn btn-primary" onclick="addAppointment()">Add
+                            appointment</button>
+                        <button id="editButton" type="button" class="btn btn-primary" style="display: none;"
+                            onclick="editAppointment()">Update
+                            appointment</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -73,6 +82,9 @@
     const weekDisplay = document.getElementById('weekDisplay');
     const successAlert = document.getElementById("successAlert");
     const errorAlert = document.getElementById("errorAlert");
+    const editButton = document.getElementById('editButton');
+    const deleteButton = document.getElementById('deleteButton');
+    const addButton = document.getElementById('addButton');
     const ws = new WebSocket('ws://192.168.178.182:8082');
 
     // Listen for connection open
@@ -97,13 +109,43 @@
                     successAlert.textContent = "Appointment created successfully";
                     setTimeout(() => {
                         successAlert.style.display = "none";
-                    }, 3000);
+                    }, 5000);
                 } else {
                     errorAlert.style.display = "block";
                     errorAlert.textContent = "Error creating appointment";
                     setTimeout(() => {
                         errorAlert.style.display = "none";
-                    }, 3000);
+                    }, 5000);
+                }
+                break;
+            case 'update-appointment':
+                if (response.status == 'success') {
+                    successAlert.style.display = "block";
+                    successAlert.textContent = "Appointment updated successfully";
+                    setTimeout(() => {
+                        successAlert.style.display = "none";
+                    }, 5000);
+                } else {
+                    errorAlert.style.display = "block";
+                    errorAlert.textContent = "Error updating appointment";
+                    setTimeout(() => {
+                        errorAlert.style.display = "none";
+                    }, 5000);
+                }
+                break;
+            case 'remove-appointment':
+                if (response.status == 'success') {
+                    successAlert.style.display = "block";
+                    successAlert.textContent = "Appointment deleted successfully";
+                    setTimeout(() => {
+                        successAlert.style.display = "none";
+                    }, 5000);
+                } else {
+                    errorAlert.style.display = "block";
+                    errorAlert.textContent = "Error deleting appointment";
+                    setTimeout(() => {
+                        errorAlert.style.display = "none";
+                    }, 5000);
                 }
                 break;
             default:
@@ -128,8 +170,46 @@
         const start_time = document.getElementById('startTimeInput').value;
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
-        const addAppointmentModal = document.getElementById('addAppointmentModal');
         ws.send(JSON.stringify({ action: 'make-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, agenda_id: <?php echo App\Application\Request::getParam('id'); ?>, name, description, start_time, end_time, color }));
+        clearModal();
+    }
+
+    function editAppointment() {
+        const name = document.getElementById('appointmentNameInput').value;
+        const description = document.getElementById('appointmentDescriptionInput').value;
+        const start_time = document.getElementById('startTimeInput').value;
+        const end_time = document.getElementById('endTimeInput').value;
+        const color = document.getElementById('appointmentColorInput').value;
+        const id = document.getElementById('deleteButton').getAttribute('data-id');
+        ws.send(JSON.stringify({ action: 'update-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, id, name, description, start_time, end_time, color }));
+    }
+
+    function removeAppointment() {
+        const id = document.getElementById('deleteButton').getAttribute('data-id');
+        ws.send(JSON.stringify({ action: 'remove-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, id }));
+    }
+
+    function clearModal() {
+        const addAppointmentModal = document.getElementById('addAppointmentModal');
+        let modalInstance = bootstrap.Modal.getInstance(addAppointmentModal);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(addAppointmentModal);
+        }
+
+        modalInstance.hide();
+
+        const name = document.getElementById('appointmentNameInput').value;
+        const description = document.getElementById('appointmentDescriptionInput').value;
+        const start_time = document.getElementById('startTimeInput').value;
+        const end_time = document.getElementById('endTimeInput').value;
+        const color = document.getElementById('appointmentColorInput').value;
+
+        document.getElementById('appointmentNameInput').value = '';
+        document.getElementById('appointmentDescriptionInput').value = '';
+        document.getElementById('startTimeInput').value = '';
+        document.getElementById('endTimeInput').value = '';
+        document.getElementById('appointmentColorInput').value = '';
+
     }
 
     function getAppointments(data) {
@@ -166,20 +246,20 @@
                     const currentDay = new Date(startDate);
                     currentDay.setDate(startDate.getDate() + i);
 
-                    const formattedDate = currentDay;
+                    const formattedDate = currentDay.toISOString().slice(0, 10);
                     if (!eventsByDay[formattedDate]) {
                         eventsByDay[formattedDate] = [];
                     }
 
                     eventsByDay[formattedDate].push({
                         ...event,
-                        name: `${event.name} ${i + 1}/${daysSpanned}`,
+                        name: `${event.name} (Day ${i + 1}/${daysSpanned})`,
                         start_time: toLocalDateString(startDate),
                         end_time: toLocalDateString(endDate)
                     });
                 }
             } else {
-                const formattedDate = startDate.toISOString().slice(0, 10);
+                const formattedDate = startDate.toISOString().slice(0, 10); // Only the date part
                 if (!eventsByDay[formattedDate]) {
                     eventsByDay[formattedDate] = [];
                 }
@@ -209,8 +289,10 @@
             // Check if the event belongs to the current week and year
             if (year === eyear && week === eweek) {
                 const dateDiv = document.createElement('div');
+                dateDiv.className = 'my-3';
 
-                const dateParagraph = document.createElement('p');
+                const dateParagraph = document.createElement('h5');
+                dateParagraph.className = 'mb-3';
                 dateParagraph.textContent = dateObj.toLocaleDateString(undefined, {
                     weekday: 'long',
                     year: 'numeric',
@@ -221,24 +303,57 @@
                 const hr = document.createElement('hr');
 
                 const eventsDiv = document.createElement('div');
-                eventsDiv.className = 'events';
 
                 eventsByDay[date].forEach((event) => {
-                    const details = document.createElement('details');
+                    const details = document.createElement('div');
+                    details.className = 'p-3 rounded-4 mb-2';
+                    details.style.backgroundColor = event.color;
+                    details.style.cursor = 'pointer';
 
-                    const summary = document.createElement('summary');
-                    summary.textContent = `${event.start_time} - ${event.end_time} ${event.name}`;
+                    const formatDateTime = (dateTimeString) => {
+                        const date = new Date(dateTimeString);
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        return `${year}-${month}-${day}T${hours}:${minutes}`;
+                    };
+
+                    details.addEventListener('click', () => {
+                        const addAppointmentModal = document.getElementById('addAppointmentModal');
+                        editButton.style.display = "block";
+                        deleteButton.style.display = "block";
+                        addButton.style.display = "none";
+                        document.getElementById('appointmentNameInput').value = event.name.split(' (Day ')[0];
+                        document.getElementById('appointmentDescriptionInput').value = event.description;
+                        document.getElementById('startTimeInput').value = formatDateTime(event.start_time);
+                        document.getElementById('endTimeInput').value = formatDateTime(event.end_time);
+                        document.getElementById('appointmentColorInput').value = event.color;
+                        deleteButton.setAttribute("data-id", event.id);
+                        let modalInstance = bootstrap.Modal.getInstance(addAppointmentModal);
+                        if (!modalInstance) {
+                            modalInstance = new bootstrap.Modal(addAppointmentModal);
+                        }
+                        modalInstance.show();
+                    })
+
+
+                    const dateSummary = document.createElement('p');
+                    dateSummary.className = 'mb-1';
+                    dateSummary.textContent = `${event.start_time} - ${event.end_time} ${event.name}`;
 
                     const description = document.createElement('p');
+                    description.className = 'mb-0';
                     description.textContent = event.description || 'No description available';
 
-                    details.appendChild(summary);
+                    details.appendChild(dateSummary);
                     details.appendChild(description);
                     eventsDiv.appendChild(details);
                 });
 
-                dateDiv.appendChild(dateParagraph);
                 dateDiv.appendChild(hr);
+                dateDiv.appendChild(dateParagraph);
                 dateDiv.appendChild(eventsDiv);
                 calendarDiv.appendChild(dateDiv);
             }
@@ -247,7 +362,7 @@
     function getWeekYear(date) {
         const d = new Date(date);
 
-        // Adjust date to Thursday (ISO 8601 week starts on Monday, but we use Thursday for consistency)
+        // Get the first day of the week
         d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3);
 
         // Get the first day of the year
@@ -300,4 +415,9 @@
 
     document.getElementById('prevWeek').addEventListener('click', () => adjustWeek(-1));
     document.getElementById('nextWeek').addEventListener('click', () => adjustWeek(1));
+    document.getElementById('addAppointmentModal').addEventListener('hide.bs.modal', () => {
+        editButton.style.display = "none";
+        deleteButton.style.display = "none";
+        addButton.style.display = "block";
+    });
 </script>

@@ -10,7 +10,7 @@ class Appointments
     public string $name;
     public ?string $description;
     public ?string $color;
-    public int $agenda_id;
+    public ?int $agenda_id;
 
     public function __construct(
         ?int $id,
@@ -19,7 +19,7 @@ class Appointments
         string $name,
         ?string $description,
         ?string $color,
-        int $agenda_id,
+        ?int $agenda_id,
     ) {
         $this->id = $id;
         $this->start_time = $start_time;

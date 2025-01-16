@@ -128,6 +128,39 @@ class AgendaRepository extends DatabaseRepository
         }
     }
 
+    public function updateAppointment(Appointments $appointment)
+    {
+        try {
+            $stmt = $this->pdo->prepare('UPDATE agenda_items SET start_time = :start_time, end_time = :end_time, name = :name, description = :description, color = :color WHERE id = :id');
+            $stmt->execute([
+                ':start_time' => $appointment->start_time->format('Y-m-d H:i:s'),
+                ':end_time' => $appointment->end_time->format('Y-m-d H:i:s'),
+                ':name' => $appointment->name,
+                ':description' => $appointment->description,
+                ':color' => $appointment->color,
+                ':id' => $appointment->id,
+            ]);
+
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            return ResponseEnum::ERROR;
+        }
+    }
+
+    public function deleteAppointment(int $id)
+    {
+        try {
+            $stmt = $this->pdo->prepare('DELETE FROM agenda_items WHERE id = :id');
+            $stmt->execute([
+                ':id' => $id,
+            ]);
+
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            return ResponseEnum::ERROR;
+        }
+    }
+
     public function createAgenda(string $name, string $description, User $user)
     {
         try {

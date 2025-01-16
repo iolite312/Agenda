@@ -107,6 +107,37 @@ class AgendaSocket implements MessageComponentInterface
 
                 $from->send(json_encode(['status' => $result->value, 'trigger' => 'make-appointment']));
                 break;
+            case 'update-appointment':
+                $agendaRepository = new AgendaRepository();
+                $startTime = new \DateTime($data['start_time']);
+                $endTime = new \DateTime($data['end_time']);
+                $appointment = new Appointments($data['id'], $startTime, $endTime, $data['name'], $data['description'], $data['color'], null);
+                $result = $agendaRepository->updateAppointment($appointment);
+                $room = $data['room'];
+
+                if (isset($this->rooms[$room]) && $result === ResponseEnum::SUCCESS) {
+                    foreach ($this->rooms[$room] as $client) {
+                        $client->send(json_encode(['trigger' => 'update']));
+                    }
+                }
+                $from->send(json_encode(['status' => $result->value, 'trigger' => 'update-appointment']));
+                break;
+            case 'remove-appointment':
+                $agendaRepository = new AgendaRepository();
+                $result = $agendaRepository->deleteAppointment($data['id']);
+                $room = $data['room'];
+
+                if (isset($this->rooms[$room]) && $result === ResponseEnum::SUCCESS) {
+                    foreach ($this->rooms[$room] as $client) {
+                        $client->send(json_encode(['trigger' => 'update']));
+                    }
+                }
+
+                $from->send(json_encode(['status' => $result->value, 'trigger' => 'remove-appointment']));
+                break;
+            default:
+                $from->send(json_encode(['trigger' => 'error', 'message' => 'Invalid request']));
+                break;
         }
     }
 
