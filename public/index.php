@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(~E_ALL);
 require '../vendor/autoload.php';
 
 $app = App\Application\Application::getInstance();

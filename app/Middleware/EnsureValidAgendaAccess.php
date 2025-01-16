@@ -3,6 +3,7 @@
 namespace App\Middleware;
 
 use App\Application\Request;
+use App\Application\Response;
 use App\Application\Session;
 use App\Repositories\AgendaRepository;
 
@@ -17,6 +18,11 @@ class EnsureValidAgendaAccess implements MiddlewareInterface
 
     public function handle(): bool
     {
+        if (empty(Session::get('user'))) {
+            Response::redirect('/');
+
+            return true;
+        }
         $agendas = $this->agendaRepository->getAgendaByUserId(Session::get('user'));
 
         foreach ($agendas as $key => $value) {
