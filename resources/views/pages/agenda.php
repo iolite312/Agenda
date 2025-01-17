@@ -189,6 +189,8 @@
     // Listen for errors
     ws.onerror = (error) => {
         console.error('WebSocket error:', error);
+        errorAlert.style.display = "block";
+        errorAlert.textContent = "Please ensure that Ratchet is running or try refreshing the page";
     };
 
     // Listen for connection close
