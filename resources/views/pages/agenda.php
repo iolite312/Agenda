@@ -144,7 +144,7 @@
                     }, 5000);
                 } else {
                     errorAlert.style.display = "block";
-                    errorAlert.textContent = "Error creating appointment";
+                    errorAlert.textContent = response.message ?? "Error creating appointment";
                     setTimeout(() => {
                         errorAlert.style.display = "none";
                     }, 5000);
@@ -204,6 +204,16 @@
         const start_time = document.getElementById('startTimeInput').value;
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
+
+        if (name == '' || description == '' || start_time == '' || end_time == '' || color == '') {
+            errorAlert.style.display = "block";
+            errorAlert.textContent = "Please fill in all fields";
+            closeModal()
+            setTimeout(() => {
+                errorAlert.style.display = "none";
+            }, 5000);
+            return;
+        }
         ws.send(JSON.stringify({ action: 'make-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, agenda_id: <?php echo App\Application\Request::getParam('id'); ?>, name, description, start_time, end_time, color }));
         closeModal()
     }
@@ -215,6 +225,15 @@
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
         const id = document.getElementById('deleteButton').getAttribute('data-id');
+        if (name == '' || description == '' || start_time == '' || end_time == '' || color == '') {
+            errorAlert.style.display = "block";
+            errorAlert.textContent = "Please fill in all fields";
+            closeModal()
+            setTimeout(() => {
+                errorAlert.style.display = "none";
+            }, 5000);
+            return;
+        }
         ws.send(JSON.stringify({ action: 'update-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, id, name, description, start_time, end_time, color }));
         closeModal()
     }
