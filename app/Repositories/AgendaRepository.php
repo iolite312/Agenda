@@ -275,6 +275,43 @@ class AgendaRepository extends DatabaseRepository
         }
     }
 
+    public function editUserPermission(string $email, AgendaRolesEnum $permission, int $agendaId)
+    {
+        try {
+            $this->pdo->beginTransaction();
+
+            $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt->execute([
+                ':email' => $email,
+            ]);
+
+            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                $this->pdo->rollBack(); // Rollback the transaction if the user is not found
+
+                return ResponseEnum::NOT_FOUND;
+            }
+
+            $userId = $user['id'];
+
+            $stmt = $this->pdo->prepare('UPDATE user_agenda SET role = :role WHERE user_id = :user_id AND agenda_id = :agenda_id');
+            $stmt->execute([
+                ':role' => $permission->value,
+                ':user_id' => $userId,
+                ':agenda_id' => $agendaId,
+            ]);
+
+            $this->pdo->commit();
+
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+
+            return ResponseEnum::ERROR;
+        }
+    }
+
     public function removeUserFromAgenda(string $email, int $agendaId)
     {
         try {

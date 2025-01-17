@@ -28,6 +28,7 @@ $router->middleware(EnsureValidLogin::class, function () use ($router) {
             $router->post('/agenda/{id}/edit', [App\Controllers\EditAgendaController::class, 'changeAgendaName']);
             $router->get('/agenda/{id}/edit/users', [App\Controllers\EditAgendaController::class, 'getAgendaUsers']);
             $router->post('/agenda/{id}/edit/adduser', [App\Controllers\EditAgendaController::class, 'addUser']);
+            $router->post('/agenda/{id}/edit/edituser', [App\Controllers\EditAgendaController::class, 'editUser']);
             $router->post('/agenda/{id}/edit/removeuser', [App\Controllers\EditAgendaController::class, 'removeUser']);
             $router->post('/agenda/{id}/delete', [App\Controllers\AgendaController::class, 'deleteAgenda']);
         }, [[AgendaRolesEnum::ADMIN]]);

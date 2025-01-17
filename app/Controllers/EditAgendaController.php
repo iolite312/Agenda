@@ -69,6 +69,23 @@ class EditAgendaController extends Controller
         return Response::json(['status' => 'success', 'message' => 'User added successfully', 'data' => $result]);
     }
 
+    public function editUser()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        $email = $data->email;
+        $permission = AgendaRolesEnum::from($data->permission);
+        $result = $this->agendaRepository->editUserPermission($email, $permission, Request::getParam('id'));
+        if ($result === ResponseEnum::NOT_FOUND) {
+            return Response::json(['status' => 'unknown', 'message' => 'User not found']);
+        }
+        if ($result === ResponseEnum::ERROR) {
+            return Response::json(['status' => 'error', 'message' => 'Something went wrong']);
+        }
+
+        return Response::json(['status' => 'success', 'message' => 'User edited successfully', 'data' => $result]);
+    }
+
     public function removeUser()
     {
         $json = file_get_contents('php://input');

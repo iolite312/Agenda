@@ -77,12 +77,46 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit user permission</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="" method="post">
+                        <div class="modal-body">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="emailLabel">Users email</span>
+                                <input type="email" id="userEmailInput2" class="form-control" placeholder="email"
+                                    aria-label="email" aria-describedby="emailLabel">
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="roleSelector">Roles</label>
+                                <select class="form-select" id="roleSelector2">
+                                    <option selected>Choose...</option>
+                                    <option value="user">User</option>
+                                    <option value="guest">Guest</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" onclick="editUser()">Add user</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 <script>
     let usersWithAccess;
     const userTable = document.getElementById("userTable");
     const addUserModal = document.getElementById("addUserModal");
+    const editUserModal = document.getElementById("editUserModal");
     const successAlert = document.getElementById("successAlert");
     const errorAlert = document.getElementById("errorAlert");
 
@@ -113,6 +147,48 @@
                 errorAlert.textContent = data.message;
             }
             let modalInstance = bootstrap.Modal.getInstance(addUserModal);
+            if (!modalInstance) {
+                modalInstance = new bootstrap.Modal(modal);
+            }
+            modalInstance.hide();
+        })
+    }
+
+    function openModel(email, role) {
+        let modalInstance = bootstrap.Modal.getInstance(editUserModal);
+        if (!modalInstance) {
+            modalInstance = new bootstrap.Modal(editUserModal);
+        }
+        document.getElementById("userEmailInput2").value = email;
+        document.getElementById("roleSelector2").value = role;
+        modalInstance.show();
+    }
+
+    function editUser() {
+        errorAlert.style.display = "none";
+        successAlert.style.display = "none";
+        const email = document.getElementById("userEmailInput2").value;
+        const permission = document.getElementById("roleSelector2").value;
+        const user = {
+            email: email,
+            permission: permission
+        };
+        fetch("/agenda/" + <?php echo $id; ?> + "/edit/edituser", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        }).then(response => response.json()).then(data => {
+            if (data.status === "success") {
+                getUsers();
+                successAlert.style.display = "block";
+                successAlert.textContent = data.message;
+            } else {
+                errorAlert.style.display = "block";
+                errorAlert.textContent = data.message;
+            }
+            let modalInstance = bootstrap.Modal.getInstance(editUserModal);
             if (!modalInstance) {
                 modalInstance = new bootstrap.Modal(modal);
             }
@@ -161,8 +237,8 @@
                                     <td>${user.accepted}</td>`;
             if (user.role != "admin") {
                 row.innerHTML += `<td class="min-width">
-                                    <button type="button" class="btn btn-primary mx-2"><img src="/assets/images/edit.svg" alt="trashcan"></button>
-                                    <button type="button" class="btn btn-danger"><img src="/assets/images/trashcan.svg" onclick="removeUser('${user.email}')" alt="trashcan"></button>
+                                    <button type="button" class="btn btn-primary mx-2" onclick="openModel('${user.email}', '${user.role}')"><img src="/assets/images/edit.svg" alt="trashcan"></button>
+                                    <button type="button" class="btn btn-danger" onclick="removeUser('${user.email}')"><img src="/assets/images/trashcan.svg" alt="trashcan"></button>
                                 </td>`
             } else {
                 row.innerHTML += `<td class="min-width">
