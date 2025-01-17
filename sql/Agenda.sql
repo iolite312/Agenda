@@ -116,6 +116,7 @@ CREATE TABLE `user_agenda` (
 INSERT INTO `user_agenda` (`user_id`, `agenda_id`, `personal_agenda`, `role`, `accepted`) VALUES
 (1, 1, 1, 'admin', 'accepted'),
 (1, 3, 0, 'admin', 'accepted'),
+(2, 2, 1, 'admin', 'accepted'),
 (2, 3, 0, 'guest', 'pending');
 
 --
