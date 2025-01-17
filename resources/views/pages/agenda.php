@@ -204,6 +204,12 @@
         const start_time = document.getElementById('startTimeInput').value;
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
+        if (!start_time.includes('T')) {
+            start_time += 'T00:00';
+        }
+        if (!end_time.includes('T')) {
+            end_time += 'T00:00';
+        }
         ws.send(JSON.stringify({ action: 'make-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, agenda_id: <?php echo App\Application\Request::getParam('id'); ?>, name, description, start_time, end_time, color }));
         clearModal();
     }
