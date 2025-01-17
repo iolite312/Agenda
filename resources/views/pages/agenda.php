@@ -205,7 +205,7 @@
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
 
-        if (name == '' || description == '' || start_time == '' || end_time == '' || color == '') {
+        if (name == '' || start_time == '' || end_time == '' || color == '') {
             errorAlert.style.display = "block";
             errorAlert.textContent = "Please fill in all fields";
             closeModal()
@@ -225,7 +225,7 @@
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
         const id = document.getElementById('deleteButton').getAttribute('data-id');
-        if (name == '' || description == '' || start_time == '' || end_time == '' || color == '') {
+        if (name == '' || start_time == '' || end_time == '' || color == '') {
             errorAlert.style.display = "block";
             errorAlert.textContent = "Please fill in all fields";
             closeModal()
