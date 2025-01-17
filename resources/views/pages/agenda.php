@@ -44,12 +44,12 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="starttimeLabel">Start time</span>
-                        <input type="datetime-local" id="startTimeInput" class="form-control"
+                        <input type="datetime-local" id="startTimeInput" value="2025-01-01T00:00" class="form-control"
                             placeholder="Appointment start_time">
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="endtimeLabel">End time</span>
-                        <input type="datetime-local" id="endTimeInput" class="form-control"
+                        <input type="datetime-local" id="endTimeInput" value="2025-01-01T00:00" class="form-control"
                             placeholder="Appointment end_time">
                     </div>
                     <div class="input-group mb-3">
@@ -204,14 +204,8 @@
         const start_time = document.getElementById('startTimeInput').value;
         const end_time = document.getElementById('endTimeInput').value;
         const color = document.getElementById('appointmentColorInput').value;
-        if (!start_time.includes('T')) {
-            start_time += 'T00:00';
-        }
-        if (!end_time.includes('T')) {
-            end_time += 'T00:00';
-        }
         ws.send(JSON.stringify({ action: 'make-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, agenda_id: <?php echo App\Application\Request::getParam('id'); ?>, name, description, start_time, end_time, color }));
-        clearModal();
+        closeModal()
     }
 
     function editAppointment() {
@@ -222,6 +216,7 @@
         const color = document.getElementById('appointmentColorInput').value;
         const id = document.getElementById('deleteButton').getAttribute('data-id');
         ws.send(JSON.stringify({ action: 'update-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, id, name, description, start_time, end_time, color }));
+        closeModal()
     }
 
     function removeAppointment() {
@@ -229,7 +224,7 @@
         ws.send(JSON.stringify({ action: 'remove-appointment', room: <?php echo App\Application\Request::getParam('id'); ?>, id }));
     }
 
-    function clearModal() {
+    function closeModal() {
         const addAppointmentModal = document.getElementById('addAppointmentModal');
         let modalInstance = bootstrap.Modal.getInstance(addAppointmentModal);
         if (!modalInstance) {
@@ -237,18 +232,18 @@
         }
 
         modalInstance.hide();
+    }
 
+    function clearModal() {
         const name = document.getElementById('appointmentNameInput').value;
         const description = document.getElementById('appointmentDescriptionInput').value;
         const start_time = document.getElementById('startTimeInput').value;
         const end_time = document.getElementById('endTimeInput').value;
-        const color = document.getElementById('appointmentColorInput').value;
 
         document.getElementById('appointmentNameInput').value = '';
         document.getElementById('appointmentDescriptionInput').value = '';
-        document.getElementById('startTimeInput').value = '';
-        document.getElementById('endTimeInput').value = '';
-        document.getElementById('appointmentColorInput').value = '';
+        document.getElementById('startTimeInput').value = "2025-01-01T00:00";
+        document.getElementById('endTimeInput').value = "2025-01-01T00:00";
 
     }
 
@@ -459,5 +454,6 @@
         editButton.style.display = "none";
         deleteButton.style.display = "none";
         addButton.style.display = "block";
+        clearModal();
     });
 </script>
