@@ -27,7 +27,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add appointment</h5>
+                <h5 class="modal-title" id="modalTitle">Add appointment</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="post">
@@ -199,6 +199,7 @@
     };
 
     function addAppointment() {
+        document.getElementById('modalTitle').textContent = "Add Appointment";
         const name = document.getElementById('appointmentNameInput').value;
         const description = document.getElementById('appointmentDescriptionInput').value;
         const start_time = document.getElementById('startTimeInput').value;
@@ -375,6 +376,7 @@
                     };
 
                     details.addEventListener('click', () => {
+                        document.getElementById('modalTitle').textContent = "Edit Appointment";
                         const addAppointmentModal = document.getElementById('addAppointmentModal');
                         editButton.style.display = "block";
                         deleteButton.style.display = "block";
@@ -470,6 +472,7 @@
     document.getElementById('prevWeek').addEventListener('click', () => adjustWeek(-1));
     document.getElementById('nextWeek').addEventListener('click', () => adjustWeek(1));
     document.getElementById('addAppointmentModal').addEventListener('hide.bs.modal', () => {
+        document.getElementById('modalTitle').textContent = "Add Appointment";
         editButton.style.display = "none";
         deleteButton.style.display = "none";
         addButton.style.display = "block";
