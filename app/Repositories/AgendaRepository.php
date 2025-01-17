@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Application\Request;
+use App\Application\Response;
 use App\Models\User;
 use App\Models\Agenda;
 use App\Enums\ResponseEnum;
@@ -273,6 +274,51 @@ class AgendaRepository extends DatabaseRepository
 
             return ResponseEnum::ERROR;
         }
+    }
+
+    public function getInvitationStatus(User $user, int $agendaId)
+    {
+        try {
+            $stmt = $this->pdo->prepare('SELECT * FROM user_agenda WHERE user_id = :user_id AND agenda_id = :agenda_id AND accepted = :accepted');
+            $stmt->execute([
+                ':user_id' => $user->id,
+                ':agenda_id' => $agendaId,
+                ':accepted' => InvitationsStatusEnum::PENDING->value,
+            ]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$result) {
+                return null;
+            }
+
+            return InvitationsStatusEnum::from($result['accepted']);
+        } catch (\Exception $e) {
+            return ResponseEnum::ERROR;
+        }
+    }
+
+    public function updateInvitationStatus(User $user, int $agendaId, InvitationsStatusEnum $status)
+    {
+        try {
+            if ($status === InvitationsStatusEnum::DECLINED) {
+                $stmt = $this->pdo->prepare('DELETE FROM user_agenda WHERE user_id = :user_id AND agenda_id = :agenda_id');
+                $stmt->execute([
+                    ':user_id' => $user->id,
+                    ':agenda_id' => $agendaId,
+                ]);
+            } else {
+                $stmt = $this->pdo->prepare('UPDATE user_agenda SET accepted = :status WHERE user_id = :user_id AND agenda_id = :agenda_id');
+                $stmt->execute([
+                    ':status' => $status->value,
+                    ':user_id' => $user->id,
+                    ':agenda_id' => $agendaId,
+                ]);
+            }
+            return ResponseEnum::SUCCESS;
+        } catch (\Exception $e) {
+            return ResponseEnum::ERROR;
+        }
+
     }
 
     public function editUserPermission(string $email, AgendaRolesEnum $permission, int $agendaId)

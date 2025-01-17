@@ -83,6 +83,32 @@
     </div>
 </div>
 <script>
+    const id = "<?php echo App\Application\Request::getParam('id'); ?>";
+    const invitationStatus = "<?php echo $inviteStatus ?>";
+    if (invitationStatus != null && invitationStatus == "pending") {
+        if (confirm("You have been invited to this agenda. Do you want to join?")) {
+            fetch("/agenda/" + id + "/invitation", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ status: "accepted" })
+            });
+        } else {
+            fetch("/agenda/" + id + "/invitation", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ status: "declined" })
+            });
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 300)
+        }
+    }
+</script>
+<script>
     const searchParams = new URLSearchParams(window.location.search);
     const weekDisplay = document.getElementById('weekDisplay');
     const successAlert = document.getElementById("successAlert");
