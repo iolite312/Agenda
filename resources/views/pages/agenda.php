@@ -9,8 +9,13 @@
                 <button class="btn btn-secondary d-flex align-items-center" id="nextWeek"><img
                         src="/assets/images/right.svg" alt="right arrow"></button>
             </div>
-            <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal"
-                data-bs-target="#addAppointmentModal"><img src="/assets/images/plus.svg" alt="plus"></button>
+            <?php
+            $roles = App\Application\Session::get('user_roles');
+            $userRole = array_filter($roles, fn($role) => array_key_exists($id, $role));
+            $role = array_values($userRole)[0][$id];
+            echo "<button class='btn btn-primary " . ($role == App\Enums\AgendaRolesEnum::GUEST ? 'd-none ' : 'd-flex ') . " align-items-center' data-bs-toggle='modal'
+                data-bs-target='#addAppointmentModal'><img src='/assets/images/plus.svg' alt='plus'></button>"
+                ?>
         </div>
     </div>
     <div class="alert alert-success" id="successAlert" style="display: none;" role="alert"></div>
