@@ -11,11 +11,11 @@
             </div>
             <?php
             $roles = App\Application\Session::get('user_roles');
-            $userRole = array_filter($roles, fn($role) => array_key_exists($id, $role));
+            $userRole = array_filter($roles, fn ($role) => array_key_exists($id, $role));
             $role = array_values($userRole)[0][$id];
             echo "<button class='btn btn-primary " . ($role == App\Enums\AgendaRolesEnum::GUEST ? 'd-none ' : 'd-flex ') . " align-items-center' data-bs-toggle='modal'
-                data-bs-target='#addAppointmentModal'><img src='/assets/images/plus.svg' alt='plus'></button>"
-                ?>
+                data-bs-target='#addAppointmentModal'><img src='/assets/images/plus.svg' alt='plus'></button>";
+            ?>
         </div>
     </div>
     <div class="alert alert-success" id="successAlert" style="display: none;" role="alert"></div>
@@ -56,12 +56,12 @@
                         <span class="input-group-text" id="colorLabel">Color</span>
                         <input type="color" id="appointmentColorInput" class="form-control"
                             placeholder="Appointment description" style="height: 38px;" value="<?php
-                            foreach ($agendas as $key => $value) {
-                                if ($value->id == App\Application\Request::getParam('id')) {
-                                    echo $value->default_color;
-                                }
+                        foreach ($agendas as $key => $value) {
+                            if ($value->id == App\Application\Request::getParam('id')) {
+                                echo $value->default_color;
                             }
-                            ?>">
+                        }
+            ?>">
                     </div>
 
                 </div>
@@ -84,7 +84,7 @@
 </div>
 <script>
     const id = "<?php echo App\Application\Request::getParam('id'); ?>";
-    const invitationStatus = "<?php echo $inviteStatus ?>";
+    const invitationStatus = "<?php echo $inviteStatus; ?>";
     if (invitationStatus != null && invitationStatus == "pending") {
         if (confirm("You have been invited to this agenda. Do you want to join?")) {
             fetch("/agenda/" + id + "/invitation", {

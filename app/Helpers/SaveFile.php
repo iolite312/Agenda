@@ -34,7 +34,7 @@ class SaveFile
 
     public static function deleteFile($file)
     {
-        if ($file == "placeholder.jpg") {
+        if ($file == 'placeholder.jpg') {
             return;
         }
         $uploadDir = '/app/public/assets/images/uploads/';

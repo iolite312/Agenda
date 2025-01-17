@@ -2,11 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Application\Response;
-use App\Enums\InvitationsStatusEnum;
 use App\Enums\ResponseEnum;
 use App\Application\Request;
 use App\Application\Session;
+use App\Application\Response;
+use App\Enums\InvitationsStatusEnum;
 use App\Repositories\AgendaRepository;
 
 class AgendaController extends Controller
@@ -56,7 +56,7 @@ class AgendaController extends Controller
         $status = InvitationsStatusEnum::from($data->status);
         $this->agendaRepository->updateInvitationStatus(Session::get('user'), $agendaId, $status);
 
-        Response::redirect("/");
+        Response::redirect('/');
     }
 
     public function deleteAgenda()

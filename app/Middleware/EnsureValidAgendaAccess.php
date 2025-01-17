@@ -3,8 +3,8 @@
 namespace App\Middleware;
 
 use App\Application\Request;
-use App\Application\Response;
 use App\Application\Session;
+use App\Application\Response;
 use App\Repositories\AgendaRepository;
 
 class EnsureValidAgendaAccess implements MiddlewareInterface
