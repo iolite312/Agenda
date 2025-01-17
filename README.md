@@ -1,30 +1,29 @@
-# Docker template for PHP projects
-This repository provides a starting template for PHP application development.
+# Agenda
 
-It contains:
-* NGINX webserver
-* PHP FastCGI Process Manager with PDO MySQL support
-* MariaDB (GPL MySQL fork)
-* PHPMyAdmin
+Agenda is just like it says a agenda application
 
-## Installation
+## Running the application
 
-1. Install Docker Desktop on Windows or Mac, or Docker Engine on Linux.
-1. Clone the project
+Before starting the application copy the `.env.example` file and name it `.env` and change the passwords of the database accounts if you want
 
-## Usage
-
-In a terminal, from the cloned project folder, run:
-```bash
-docker compose up
+```sh
+docker compose up -d
 ```
 
-NGINX will now serve files in the app/public folder. Visit localhost in your browser to check.
-PHPMyAdmin is accessible on localhost:8080
+## accessing the application
 
-If you want to stop the containers, press Ctrl+C. 
+Agenda comes with two default accounts that have some agenda's already added to them
 
-Or run:
-```bash
-docker compose down
+Main account:
+
+```
+email: admin@admin.com
+password: 1234
+```
+
+Secondary account:
+
+```
+email: guest@guest.com
+password: 1234
 ```

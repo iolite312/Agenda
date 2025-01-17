@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Dec 09, 2024 at 08:31 PM
+-- Generation Time: Jan 17, 2025 at 03:12 PM
 -- Server version: 11.5.2-MariaDB-ubu2404
 -- PHP Version: 8.2.26
 
@@ -29,10 +29,19 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `agendas` (
   `id` int(11) NOT NULL,
-  `name` varchar(500) NOT NULL,
-  `description` varchar(500) DEFAULT NULL,
-  `default_color` varchar(500) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+  `name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci NOT NULL,
+  `description` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci DEFAULT NULL,
+  `default_color` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `agendas`
+--
+
+INSERT INTO `agendas` (`id`, `name`, `description`, `default_color`) VALUES
+(1, 'Jhon Doe', NULL, '#0a58ca'),
+(2, 'Doe Jhon', NULL, '#0a58ca'),
+(3, 'Showcase', '', '#0a58ca');
 
 -- --------------------------------------------------------
 
@@ -78,6 +87,14 @@ CREATE TABLE `users` (
   `profile_picture` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `salt`, `profile_picture`) VALUES
+(1, 'Jhon', 'Doe', 'admin@admin.com', '$2y$12$5gc4q7VcxVJVNAi4Pb0pLOV0ruPSr613ipowI2zZdjKWRm3Sxet3i', 'fsp5IKa5g0emc0KVIt1X', 'placeholder.jpg'),
+(2, 'Doe', 'Jhon', 'guest@guest.com', '$2y$12$bLuKxhzfEAGLIJ3wZ4s9/O0W7Xtj9yBis1sHT.qRBcHjW6B3lk3Nu', 'iD8iV6AlbBrVwqiMplTH', 'placeholder.jpg');
+
 -- --------------------------------------------------------
 
 --
@@ -91,6 +108,15 @@ CREATE TABLE `user_agenda` (
   `role` varchar(10) NOT NULL,
   `accepted` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+--
+-- Dumping data for table `user_agenda`
+--
+
+INSERT INTO `user_agenda` (`user_id`, `agenda_id`, `personal_agenda`, `role`, `accepted`) VALUES
+(1, 1, 1, 'admin', 'accepted'),
+(1, 3, 0, 'admin', 'accepted'),
+(2, 3, 0, 'guest', 'pending');
 
 --
 -- Indexes for dumped tables
@@ -136,19 +162,19 @@ ALTER TABLE `user_agenda`
 -- AUTO_INCREMENT for table `agendas`
 --
 ALTER TABLE `agendas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `agenda_items`
 --
 ALTER TABLE `agenda_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
