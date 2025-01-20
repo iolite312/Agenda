@@ -9,6 +9,7 @@ Before starting the application copy the `.env.example` file and name it `.env` 
 ```sh
 docker compose up -d
 ```
+and when the application has started you may have to reboot the whole application because ratchet has crashed
 
 ## accessing the application
 
