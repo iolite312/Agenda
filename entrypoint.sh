@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Define the target directory for uploads
+# Define the target directory for uploads.
 TARGET_DIR="/app/public/assets/images/uploads"
 
 # Ensure the uploads directory exists
