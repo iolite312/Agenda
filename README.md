@@ -1,6 +1,6 @@
 # Agenda
 
-Agenda is just like it says a agenda application.
+Agenda is just like it says a agenda application
 
 ## Running the application
 
